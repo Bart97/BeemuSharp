@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<spells>
+	<spell id="FIRST_AID">
+		<name>First Aid</name>
+		<chant>first aid</chant>
+		<target>Self</target>
+		<hits>Single</hits>
+		<time metric="ms">1000</time>
+		<maxlevel>10</maxlevel>
+		<tpcost>10</tpcost>
+		
+		<event trigger="this.cast">
+			<script language="jscript"><![CDATA[
+				target.Effect(123);
+				target.AddHP(target.maxhp / (20.0 - this.level));
+			]]></script>
+		</event>
+	</spell>
+</spells>

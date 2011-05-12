@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<items>
+	<item id="PEASANT_CLOTHES">
+		<name>Peasant Clothes (female)</name>
+		<equipslot>Armor</equipslot>
+		<gender>Female</gender>
+		<shape>2x3</shape>
+		<graphic>166</graphic>
+		<dollgraphic>14</dollgraphic>
+		<weight>4</weight>
+		<armor>1</armor>
+		<events>
+			<event trigger="item.equip">
+				<script language="jscript"><![CDATA[
+					player.Say("Oh my... Breasts!");
+				]]></script>
+			</event>
+		</events>
+	</item>
+
+	<item id="PEASANT_SUIT">
+		<name>Peasant Suit (male)</name>
+		<equipslot>Armor</equipslot>
+		<gender>Male</gender>
+		<shape>2x3</shape>
+		<graphic>166</graphic>
+		<dollgraphic>14</dollgraphic>
+		<weight>4</weight>
+		<armor>1</armor>
+	</item>
+</items>

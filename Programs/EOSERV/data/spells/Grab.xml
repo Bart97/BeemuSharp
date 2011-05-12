@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<spells>
+	<spell id="GRAB">
+		<name>Grab</name>
+		<chant>get over here</chant>
+		<target>Any</target>
+		<hits>Single</hits>
+		
+		<event trigger="this.cast">
+			<script language="jscript"><![CDATA[
+				target.Effect(123);
+				target.Warp(player.map, player.x, player.y);
+			]]></script>
+		</event>
+	</spell>
+</spells>

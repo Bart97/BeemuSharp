@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<classes>
+	<class id="PEASANT">
+		<name>Peasant</name>
+
+		<events>
+			<event trigger="player.calculatestats">
+				<script language="jscript"><![CDATA[
+					player.weight = 70;
+				]]></script>
+			</event>
+		</events>
+	</class>
+</classes>

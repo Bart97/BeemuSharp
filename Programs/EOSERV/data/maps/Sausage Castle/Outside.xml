@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<maps>
+	<map id="SAUSAGE_CASTLE_OUTSIDE">
+		<name>Outside Sausage Castle</name>
+		<emf>Outside.emf</emf>
+
+		<chests>
+			<chest>
+				<x>4</x>
+				<y>8</y>
+
+				<spawns>
+					<spawn>
+						<item>GOLD</item>
+						<amount>
+							<range>
+								<min>1</min>
+								<max>2</max>
+							</range>
+						</amount>
+						<time metric="sec">720</time>
+						<key>SAUSAGE_CASTLE_RUSTY_KEY</key>
+					</spawn>
+				</spawns>
+			</chest>
+		</chests>
+		
+		<items>
+			<item>
+				<x>5</x>
+				<y>8</y>
+				
+				<spawn>
+					<item>SAUSAGE_CASTLE_RUSTY_KEY</item>
+					<amount>1</amount>
+					<time metric="sec">3600</time>
+				</spawn>
+			</item>
+		</items>
+		
+		<mobs>
+			<mob>
+				<id>SAUSAGE_CASTLE_GUARD_1</id>
+				<x>9</x>
+				<y>10</y>
+				<spawnrange>2</spawnrange>
+			</mob>
+
+			<mob>
+				<id>SAUSAGE_CASTLE_GUARD_1</id>
+				<x>9</x>
+				<y>10</y>
+				<spawnrange>2</spawnrange>
+			</mob>
+		</mobs>
+		
+		<signs>
+			<sign>
+				<x>12</x>
+				<y>10</y>
+				<title>Welcome to Sausage Castle!</title>
+				<message>The public is free to roam the main areas of the castle.</message>
+			</sign>
+		</signs>
+		
+		<warps>
+			<warp>
+				<x>9</x>
+				<y>4</y>
+				<destination>
+					<map>SAUSAGE_CASTLE_ENTRANCE</map>
+					<x>9</x>
+					<y>35</y>
+				</destination>
+			</warp>
+
+			<warp>
+				<x>10</x>
+				<y>4</y>
+				<destination>
+					<map>SAUSAGE_CASTLE_ENTRANCE</map>
+					<x>10</x>
+					<y>35</y>
+				</destination>
+			</warp>
+
+			<warp>
+				<x>11</x>
+				<y>4</y>
+				<destination>
+					<map>SAUSAGE_CASTLE_ENTRANCE</map>
+					<x>11</x>
+					<y>35</y>
+				</destination>
+			</warp>
+		</warps>
+		
+		<events>
+			<event trigger="player.entermap">
+				<script language="jscript"><![CDATA[
+					player.ServerMsg("Welcome to the super duper Sausage Castle!");
+				]]></script>
+			</event>
+		</events>
+	</map>
+</maps>
