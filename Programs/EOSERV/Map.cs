@@ -92,35 +92,59 @@ namespace EOHax.Programs.EOSERV
 			
 			return localObjects;
 		}
-		
+
+        public ushort GenerateObjectID<T>() where T : IMapObject
+        {
+            ushort lastId = 0;
+            foreach (IMapObject obj in objects)
+            {
+                if (typeof(T).IsInstanceOfType(obj))
+                    if (obj.Client.Id > lastId)
+                        lastId = obj.Client.Id;
+            }
+            return lastId;
+        }
+
+        public T GetObjectByID<T>(ushort id) where T : IMapObject
+        {
+            foreach (IMapObject obj in objects)
+			{
+				if (typeof(T).IsInstanceOfType(obj) && obj.Id == id)
+					return (T)obj;
+			}
+
+            return default(T);
+        }
+
 		/// <summary>
 		/// Sends a packet to all Character MapObjects in view range of a point on the map
 		/// </summary>
 		/// <param name="packet">Packet to be sent</param>
 		/// <param name="x">X coordinate to begin searching</param>
 		/// <param name="y">Y coordinate to begin searching</param>
-		public void SendInRange(Packet packet, byte x, byte y)
+        public void SendInRange(Packet packet, byte x, byte y, MapObject exclude = null)
 		{
 			foreach (IMapObject obj in ObjectsInRange<IMapObject>(x, y))
 			{
+                if (obj == exclude) continue;
 				obj.Client.Send(packet);
 			}
 		}
 
-		public void Enter(MapObject obj, WarpAnimation animation)
+		public void Enter(MapObject obj, WarpAnimation animation, MapObject exclude = null)
 		{
 			if (!objects.Add(obj))
 				return;
 
-			obj.SendInRange(obj.AddToViewBuilder(animation), false);
+			obj.SendInRange(obj.AddToViewBuilder(animation), false, exclude);
 		}
 
-		public void Leave(MapObject obj, WarpAnimation animation)
+        public void Leave(MapObject obj, WarpAnimation animation, MapObject exclude = null)
 		{
 			if (!objects.Remove(obj))
 				return;
 
-			obj.SendInRange(obj.DeleteFromViewBuilder(animation), false);
+			obj.SendInRange(obj.DeleteFromViewBuilder(animation), false, exclude);
 		}
 
 		public void ObjectBuilder(ref Packet packet)

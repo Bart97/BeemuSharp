@@ -26,6 +26,20 @@ namespace EOHax.EO.Data
 		/// </summary>
 		public override string FileType { get { return "ECF"; } }
 
+        /// <summary>
+        /// Returns a element of a key
+        /// </summary>
+        /// <param name="key">The key that you want the element of</param>
+        /// <returns>Entry of that key</returns>
+        public Entry this[ushort id]
+        {
+            get
+            {
+                if (id > data.Count) return (Entry)data[id];
+                else return null;
+            }
+        }
+
 		/// <summary>
 		/// Return a new class-specific data entry
 		/// </summary>

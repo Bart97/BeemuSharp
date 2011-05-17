@@ -47,6 +47,14 @@ namespace EOHax.EO.Data
 		/// </summary>
 		public abstract IPubEntry EntryFactory();
 
+        /// <summary>
+        /// Ammount of entries
+        /// </summary>
+        public int Count
+        {
+            get { return data.Count; }
+        }
+
 		/// <summary>
 		/// Returns an enumerator for the pub file entries
 		/// </summary>

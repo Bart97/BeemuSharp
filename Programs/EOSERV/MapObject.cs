@@ -24,7 +24,6 @@ namespace EOHax.Programs.EOSERV
 		[NonSerialized] private short   accuracy;
 		[NonSerialized] private short   evade;
 		[NonSerialized] private short   defence;
-
 #region Null Accessors
 		public string MapId
 		{
@@ -116,6 +115,12 @@ namespace EOHax.Programs.EOSERV
 			get { return Server.Maps[mapId]; }
 		}
 
+        public ushort Id
+        {
+            get { return Client.Id; }
+            protected set { Client.SetId(value); }
+        }
+
 		private void Init()
 		{
 			if (Client == null)
@@ -128,8 +133,8 @@ namespace EOHax.Programs.EOSERV
 		{
 			Init();
 		}
-
-		public new void Activate(IServer server)
+#region Database
+        public new void Activate(IServer server)
 		{
 			base.Activate(server);
 
@@ -140,18 +145,18 @@ namespace EOHax.Programs.EOSERV
 		{
 			base.Store();
 		}
-
-		public IEnumerable<T> GetInRange<T>(int distance = -1)
+#endregion
+        public IEnumerable<T> GetInRange<T>(int distance = -1)
 			where T : IMapObject
 		{
 			return Map.ObjectsInRange<T>(X, Y, distance);
 		}
 
-		public void SendInRange(Packet packet, bool echo = true)
+		public void SendInRange(Packet packet, bool echo = true, MapObject exclude = null)
 		{
 			foreach (IMapObject obj in Map.ObjectsInRange<IMapObject>(X, Y))
 			{
-				if (echo || obj != this)
+				if ((echo || obj != this) && obj != exclude)
 					obj.Client.Send(packet);
 			}
 		}

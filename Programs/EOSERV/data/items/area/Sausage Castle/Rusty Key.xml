@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<items>
-	<item id="SAUSAGE_CASTLE_RUSTY_KEY">
-		<name>Rusty Key</name>
-		<shape>1x1</shape>
-		<graphic>123</graphic>
-	</item>
-</items>

@@ -44,6 +44,7 @@ namespace EOHax.Scripting
 			this.Language = language;
 			this.Source = source;
 			this.referencedAssemblies = new List<string>();
+            referencedAssemblies.Add("System.dll");
 		}
 	}
 }

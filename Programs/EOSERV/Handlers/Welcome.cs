@@ -30,16 +30,16 @@ namespace EOHax.Programs.EOSERV.Handlers
 			reply.AddBytes(client.Character.Map.Data.RevisionID);
 			reply.AddThree((int)client.Character.Map.Data.PubFileLength);
 
-			reply.AddBytes(client.Server.ItemData.RevisionID);
+			reply.AddBytes(client.Server.ItemData.revisionId);
 			reply.AddShort((short)client.Server.ItemData.Count);
 
-			reply.AddBytes(client.Server.NpcData.RevisionID);
+			reply.AddBytes(client.Server.NpcData.revisionId);
 			reply.AddShort((short)client.Server.NpcData.Count);
 
-			reply.AddBytes(client.Server.SpellData.RevisionID);
+			reply.AddBytes(client.Server.SpellData.revisionId);
 			reply.AddShort((short)client.Server.SpellData.Count);
 
-			reply.AddBytes(client.Server.ClassData.RevisionID);
+			reply.AddBytes(client.Server.ClassData.revisionId);
 			reply.AddShort((short)client.Server.ClassData.Count);
 
 			reply.AddBreakString(client.Character.Name);
@@ -113,16 +113,22 @@ namespace EOHax.Programs.EOSERV.Handlers
 				reply.AddBreakString("A");
 			}
 			
-			reply.AddChar(10); // Weight
-			reply.AddChar(70); // Max Weight
+			reply.AddChar(client.Character.Weight); // Weight
+			reply.AddChar(client.Character.MaxWeight); // Max Weight
 			
 			// Inventory
+            foreach (Item item in client.Character.Items)
+            {
+                reply.AddShort(item.Id);
+                reply.AddInt(item.Amount);
+            }
 			reply.AddBreak();
 
 			// Spells
 			reply.AddBreak();
 
-			IEnumerable<IMapObject> characters = client.Character.GetInRange<IMapObject>();
+			IEnumerable<Character> characters = client.Character.GetInRange<Character>();
+            IEnumerable<MapItem> items = client.Character.GetInRange<MapItem>();
 			
 			reply.AddChar((byte)characters.Count());
 			reply.AddBreak();
@@ -140,7 +146,10 @@ namespace EOHax.Programs.EOSERV.Handlers
 			reply.AddBreak();
 
 			// Items
-			/* ... */
+            foreach (MapItem item in items)
+            {
+                item.InfoBuilder(ref reply);
+            }
 
 			client.Send(reply);
 		}
@@ -162,22 +171,22 @@ namespace EOHax.Programs.EOSERV.Handlers
 					break;
 
 				case FileType.Item:
-					fileName = client.Server.ItemData.GetPubFile("./tmp/");
+                    fileName = "./data/dat001.eif";
 					replyCode = InitReply.FileEIF;
 					break;
 
 				case FileType.NPC:
-					fileName = client.Server.NpcData.GetPubFile("./tmp/");
+                    fileName = "./data/dtn001.enf";
 					replyCode = InitReply.FileENF;
 					break;
 
 				case FileType.Spell:
-					fileName = client.Server.SpellData.GetPubFile("./tmp/");
+                    fileName = "./data/dsl001.esf";
 					replyCode = InitReply.FileESF;
 					break;
 
 				case FileType.Class:
-					fileName = client.Server.ClassData.GetPubFile("./tmp/");
+                    fileName = "./data/dat001.ecf";
 					replyCode = InitReply.FileECF;
 					break;
 

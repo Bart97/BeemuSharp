@@ -29,12 +29,13 @@ namespace EOHax.Programs.EOSERV
 		short     Evade     { get; }
 		short     Defence   { get; }
 		IMap      Map       { get; }
-
-		void Activate(IServer server);
+        ushort    Id        { get; }
+#region Database
+        void Activate(IServer server);
 		void Store();
-
-		IEnumerable<T> GetInRange<T>(int distance = -1) where T : IMapObject;
-		void           SendInRange  (Packet packet, bool echo = true);
+#endregion
+        IEnumerable<T> GetInRange<T>(int distance = -1) where T : IMapObject;
+        void SendInRange(Packet packet, bool echo = true, MapObject exclude = null);
 
 		void CalculateStats();
 

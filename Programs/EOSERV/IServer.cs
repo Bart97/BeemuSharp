@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using EOHax.EO.Data;
 using EOHax.EOSERV.Data;
 using EOHax.Scripting;
 
@@ -7,10 +8,10 @@ namespace EOHax.Programs.EOSERV
 {
 	public interface IServer
 	{
-		ItemDataSet  ItemData  { get; }
-		NpcDataSet   NpcData   { get; }
-		ClassDataSet ClassData { get; }
-		SpellDataSet SpellData { get; }
+		EIF  ItemData  { get; }
+		ENF   NpcData   { get; }
+		ECF ClassData { get; }
+		ESF SpellData { get; }
 		MapDataSet   MapData   { get; }
 		Database     Database  { get; }
 
@@ -18,6 +19,7 @@ namespace EOHax.Programs.EOSERV
 
 		IDictionary<ushort, IClient> Clients { get; }
 		IDictionary<string, IMap>    Maps    { get; }
+        List<Character> Characters { get; }
 
 		void Start();
 		void Stop ();

@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using EOHax.EO.Communication;
+using EOHax.EO.Data;
 using EOHax.EOSERV.Data;
 using EOHax.Scripting;
 
@@ -16,11 +17,12 @@ namespace EOHax.Programs.EOSERV
 		private Thread thread;
 		private Dictionary<ushort, IClient> clients;
 		private Dictionary<string, IMap> maps;
+        private List<Character> characters;
 
-		public ItemDataSet ItemData { get; private set; }
-		public NpcDataSet NpcData { get; private set; }
-		public ClassDataSet ClassData { get; private set; }
-		public SpellDataSet SpellData { get; private set; }
+		public EIF ItemData { get; private set; }
+		public ENF NpcData { get; private set; }
+		public ECF ClassData { get; private set; }
+		public ESF SpellData { get; private set; }
 		public MapDataSet MapData { get; private set; }
 		public Database Database { get; private set; }
 
@@ -35,6 +37,11 @@ namespace EOHax.Programs.EOSERV
 		{
 			get { return maps; }
 		}
+
+        public List<Character> Characters
+        {
+            get { return characters; }
+        }
 
 		private ushort GenerateClientID()
 		{
@@ -64,17 +71,18 @@ namespace EOHax.Programs.EOSERV
 			Database = new Database("eoserv.db4o");
 			clients = new Dictionary<ushort, IClient>();
 			maps = new Dictionary<string, IMap>();
+            characters = new List<Character>();
 
-			ItemData = new ItemDataSet("./data/items/");
-			NpcData = new NpcDataSet("./data/npcs/");
-			ClassData = new ClassDataSet("./data/classes/");
-			SpellData = new SpellDataSet("./data/spells/");
+            ItemData = new EIF("./data/dat001.eif");
+            NpcData = new ENF("./data/dtn001.enf");
+            ClassData = new ECF("./data/dat001.ecf");
+            SpellData = new ESF("./data/dsl001.esf");
 			MapData = new MapDataSet("./data/maps/");
 
-			ItemData.GetPubFile("./tmp/");
+			/*ItemData.GetPubFile("./tmp/");
 			NpcData.GetPubFile("./tmp/");
 			ClassData.GetPubFile("./tmp/");
-			SpellData.GetPubFile("./tmp/");
+			SpellData.GetPubFile("./tmp/");*/
 
 			foreach (KeyValuePair<string, MapData> entry in MapData)
 			{
@@ -123,8 +131,11 @@ namespace EOHax.Programs.EOSERV
 				{
 					logString += " " + client.Account.Username;
 
-					if (client.Character != null)
-						logString += "/" + client.Character.Name;
+                    if (client.Character != null)
+                    {
+                        Characters.Remove(client.Character);
+                        logString += "/" + client.Character.Name;
+                    }
 				}
 
 				Program.Logger.LogInfo(logString);

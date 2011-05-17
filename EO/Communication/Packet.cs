@@ -44,6 +44,7 @@ namespace EOHax.EO.Communication
 		Locker = 37,
 		Barber = 38,
 		Guild = 39,
+        Music = 40,
 		Sit = 41,
 		Recover = 42,
 		Board = 43,
@@ -87,8 +88,12 @@ namespace EOHax.EO.Communication
 		Server = 23,
 		Drop = 24,
 		Junk = 25,
+        Obtain = 26,
 		Get = 27,
+        Kick = 28, // Guild
+        Rank = 29, // Guild
 		Exp = 33,
+        Dialog = 34,
 
 		Ping = 240,
 		Pong = 241,

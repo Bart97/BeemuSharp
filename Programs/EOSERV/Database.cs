@@ -5,6 +5,7 @@ using System.Net;
 using Db4objects.Db4o;
 using Db4objects.Db4o.Config;
 using Db4objects.Db4o.Config.Encoding;
+using EOHax.EO.Data;
 
 namespace EOHax.Programs.EOSERV
 {
@@ -43,6 +44,11 @@ namespace EOHax.Programs.EOSERV
 		{
 			Container.Commit();
 		}
+
+        public void Delete(Object obj)
+        {
+            Container.Delete(obj);
+        }
 	}
 
 	/*public class Guild
@@ -76,17 +82,35 @@ namespace EOHax.Programs.EOSERV
 		private Character first;
 		private Character second;
 		private bool legal;
-	}
+	}*/
 
-	public class Item
+    public class Item : DatabaseObject
 	{
-		private string id;
-		private byte amount;
+		public short id;
+		public int amount;
 
-		[Transient] private ItemData data;
-	}
+		//[Transient] private EIF.Entry data;
 
-	public class BankAccount
+        public short Id
+        {
+            get { return id; }
+            private set { id = value; }
+        }
+
+        public int Amount
+        {
+            get { return amount; }
+            set { amount = value; }
+        }
+
+        public Item(IServer server, short id, int amount): base(server)
+        {
+            this.id = id;
+            this.amount = amount;
+        }
+    }
+
+	/*public class BankAccount
 	{
 		private int gold;
 		private byte upgrades;

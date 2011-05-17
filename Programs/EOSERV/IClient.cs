@@ -41,5 +41,7 @@ namespace EOHax.Programs.EOSERV
 		void Login          (Account account);
 		void SelectCharacter(Character character);
 		void EnterGame      ();
+
+        void HelloHax0r();
 	}
 }

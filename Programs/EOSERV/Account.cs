@@ -133,8 +133,8 @@ namespace EOHax.Programs.EOSERV
 
 			SetPassword(password);
 		}
-
-		public void Activate(IServer server, IClient client)
+#region Database
+        public void Activate(IServer server, IClient client)
 		{
 			base.Activate(server);
 
@@ -162,8 +162,8 @@ namespace EOHax.Programs.EOSERV
 			SafeStore(lastIP);
 			SafeStore(characters);
 		}
-
-		public void SetPassword(string password)
+#endregion
+        public void SetPassword(string password)
 		{
 			SetPassword(ASCIIEncoding.ASCII.GetBytes(password));
 		}

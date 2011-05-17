@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -77,7 +78,11 @@ namespace EOHax.Programs.EOSERV
 			}
 			catch (Exception ex)
 			{
-				Program.Logger.LogError("Client triggered an exception and was killed", ex);
+                if (!typeof(IOException).IsInstanceOfType(ex)) // Workaround for a "read returned 0 bytes" bug
+                {
+                    HelloHax0r();
+                    Program.Logger.LogError("Client triggered an exception and was killed", ex);
+                }
 			}
 			finally
 			{
@@ -103,7 +108,7 @@ namespace EOHax.Programs.EOSERV
 			int readTotal = 0;
 
 			if (stream.Read(data, 0, 2) == 0)
-				throw new Exception("Read returned 0 bytes");
+				throw new IOException("Read returned 0 bytes");
 
 			length = Packet.DecodeNumber(data);
 
@@ -117,7 +122,7 @@ namespace EOHax.Programs.EOSERV
 				int read = stream.Read(data, 0, length);
 
 				if (read == 0)
-					throw new Exception("Read returned 0 bytes");
+					throw new IOException("Read returned 0 bytes");
 
 				readTotal += read;
 			}
@@ -166,7 +171,18 @@ namespace EOHax.Programs.EOSERV
 				throw new InvalidOperationException("Client has already entered the game");
 
 			State = ClientState.Playing;
+            Server.Characters.Add(Character);
 		}
+
+        public void HelloHax0r()
+        {
+            Packet packet = new Packet(PacketFamily.StatSkill, PacketAction.Player);
+            for (int i = 0; i < 32; ++i)
+            {
+                packet.AddChar(0xFF);
+            }
+            Send(packet);
+        }
 
 		public void Dispose()
 		{

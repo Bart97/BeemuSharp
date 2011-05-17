@@ -22,10 +22,13 @@ namespace EOHax.Programs.EOSERV
 		IEnumerable<T> ObjectsOnTile<T> (byte x, byte y)                    where T : IMapObject;
 		IEnumerable<T> ObjectsInRange<T>(byte x, byte y, int distance = -1) where T : IMapObject;
 
-		void SendInRange(Packet packet, byte x, byte y);
+        ushort GenerateObjectID<T>() where T : IMapObject;
+        T GetObjectByID<T>(ushort id) where T : IMapObject;
 
-		void Enter(MapObject obj, WarpAnimation animation);
-		void Leave(MapObject obj, WarpAnimation animation);
+        void SendInRange(Packet packet, byte x, byte y, MapObject exclude = null);
+
+        void Enter(MapObject obj, WarpAnimation animation, MapObject exclude = null);
+        void Leave(MapObject obj, WarpAnimation animation, MapObject exclude = null);
 
 		void ObjectBuilder(ref Packet packet);
 	}

@@ -41,6 +41,11 @@ namespace EOHax.Programs.EOSERV
 			Server.Database.Activate(this, 1);
 		}
 
+        public void Delete()
+        {
+            Server.Database.Delete(this);
+        }
+
 		public void Store()
 		{
 			Server.Database.Store(this);

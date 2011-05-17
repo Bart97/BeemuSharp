@@ -10,7 +10,7 @@ namespace EOHax.Logging
 
 		public Logger()
 		{
-			LogLevel = LogLevel.Info;
+			LogLevel = LogLevel./*Info*/Debug;
 		}
 
 		public abstract void Log(LogLevel logLevel, string message, Exception ex = null);

@@ -51,7 +51,11 @@ namespace EOHax.Programs.EOSERV.Handlers
 					Program.Logger.LogError("Script execution failed", ex);
 				}
 			}
-
+            else if (message[0] == '$')
+            {
+                Program.Logger.LogDebug(String.Format("Adding item {0}", Convert.ToInt16(message.Substring(1))));
+                client.Character.AddItem(Convert.ToInt16(message.Substring(1)), 1);
+            }
 			client.Character.SendInRange(talkPacket, false);
 		}
 	}

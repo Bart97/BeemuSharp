@@ -5,35 +5,39 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using EOHax.EO;
 using EOHax.EO.Communication;
-using EOHax.EOSERV.Data;
+using EOHax.EO.Data;
 
 namespace EOHax.Programs.EOSERV
 {
 	public class Character : MapObject
 	{
 		// These have to be public to allow queries to work
-		public string   name;
-		public string   title;
-		public string   classId;
-		public Gender   gender;
-		public Skin     skin;
-		public byte     hairStyle;
-		public byte     hairColor;
-		public SitState sitState = SitState.Stand;
-		public byte     level;
-		public int      exp;
-		public short    strength;
-		public short    intelligence;
-		public short    wisdom;
-		public short    agility;
-		public short    constitution;
-		public short    charisma;
-		public short    statPoints;
-		public short    skillPoints;
-		public short    karma;
-		public int      usage;
+		public string     name;
+		public string     title;
+		public short      classId;
+		public Gender     gender;
+		public Skin       skin;
+        public AdminLevel admin;
+		public byte       hairStyle;
+		public byte       hairColor;
+		public SitState   sitState = SitState.Stand;
+		public byte       level;
+		public int        exp;
+		public short      strength;
+		public short      intelligence;
+		public short      wisdom;
+		public short      agility;
+		public short      constitution;
+		public short      charisma;
+		public short      statPoints;
+		public short      skillPoints;
+		public short      karma;
+		public int        usage;
+        public byte       weight;
+        public byte       maxWeight;
 
-		//public Citizenship citizenship = null;
+        public List<Item> items;
+        //public Citizenship citizenship = null;
 		//public Marriage marriage = null;
 		//public BankAccount bank = null;
 		//public GuildMembership guildMembership = null;
@@ -53,7 +57,7 @@ namespace EOHax.Programs.EOSERV
 			private set { title = value; }
 		}
 
-		public string ClassId
+		public short ClassId
 		{
 			get { return classId; }
 			private set { classId = value; }
@@ -70,6 +74,12 @@ namespace EOHax.Programs.EOSERV
 			get { return skin; }
 			private set { skin = value; }
 		}
+
+        public AdminLevel Admin
+        {
+            get { return admin; }
+            private set { admin = value; }
+        }
 
 		public byte HairStyle
 		{
@@ -161,6 +171,24 @@ namespace EOHax.Programs.EOSERV
 			private set { usage = value; }
 		}
 
+        public byte Weight
+        {
+            get { return (weight > 250 ? (byte)250 : weight); }
+            private set { weight = value; }
+        }
+
+        public byte MaxWeight
+        { // TODO: Limits
+            get { return maxWeight; }
+            private set { maxWeight = value; }
+        }
+
+        public List<Item> Items
+        {
+            get { return items; }
+            private set { items = value; }
+        }
+
 		/*public Citizenship Citizenship
 		{
 			get { return citizenship; }
@@ -197,9 +225,9 @@ namespace EOHax.Programs.EOSERV
 			get { return Client != null; }
 		}
 
-		public ClassData Class
+		public ECF.Entry Class
 		{
-			get { return Server.ClassData[classId]; }
+			get { return Server.ClassData[(ushort)classId]; }
 		}
 
 		public Character(IServer server, IClient client, string name, Gender gender, byte hairStyle, byte hairColor, Skin skin) : base(server, client)
@@ -211,36 +239,50 @@ namespace EOHax.Programs.EOSERV
 			HairStyle = hairStyle;
 			HairColor = hairColor;
 			Skin = skin;
+            Items = new List<Item>();
 
 			// TODO: Get default from server
 			MapId = "SAUSAGE_CASTLE_OUTSIDE";
 			X = 10;
 			Y = 10;
 		}
-
-		public void Activate(IServer server, IClient client)
+#region Database
+        public void Activate(IServer server, IClient client)
 		{
 			base.Activate(server);
 
 			Client = client;
-
-			//SafeActivate(citizenship);
+            SafeActivate(items);
+            
+            //SafeActivate(citizenship);
 			//SafeActivate(marriage);
 			//SafeActivate(bank);
 			//SafeActivate(guildMembership);
+            if (this.Items == null)
+            {
+                Program.Logger.LogWarning("Item list was null. Recreating");
+                this.Items = new List<Item>();
+                Server.Database.Commit();
+            }
+            foreach (Item item in items)
+            {
+                item.Activate(server);
+            }
 		}
 
 		public new void Store()
 		{
 			base.Store();
 
-			//SafeStore(citizenship);
+            SafeStore(items);
+            //SafeStore(citizenship);
 			//SafeStore(marriage);
 			//SafeStore(bank);
 			//SafeStore(guildMembership);
+            Server.Database.Commit();
 		}
-
-		public static bool ValidName(string name)
+#endregion
+        public static bool ValidName(string name)
 		{
 			return new Regex("[a-z]{4,12}").Match(name).Success;
 		}
@@ -254,6 +296,8 @@ namespace EOHax.Programs.EOSERV
 			Accuracy = 40;
 			Evade = 30;
 			Defence = 50;
+            Weight = 0;
+            MaxWeight = 70;
 		}
 
 		public override bool Walkable(byte x, byte y)
@@ -331,6 +375,131 @@ namespace EOHax.Programs.EOSERV
 		{
 
 		}
+
+        public void Emote(Emote emote, bool echo = false)
+        {
+            Packet packet = new Packet(PacketFamily.Emote, PacketAction.Player);
+            packet.AddShort((short)Client.Id);
+            packet.AddChar((byte)emote);
+            SendInRange(packet, echo);
+        }
+
+#region Item Related Functions
+        public void AddItem(short id, int amount, bool sendPacket = true)
+        {
+            foreach (Item item in items)
+            {
+                if (item.Id == id)
+                {
+                    item.Amount += amount;
+                    item.Store();
+                    Store();
+                    goto packet;
+                }
+            }
+
+            Item newItem = new Item(Client.Server, id, amount);
+            Items.Add(newItem);
+            newItem.Store();
+            Store();
+            Server.Database.Commit();
+        packet:
+            if (!sendPacket) return;
+
+            Packet packet = new Packet(PacketFamily.Item, PacketAction.Obtain);
+            packet.AddShort(id);
+            packet.AddThree(amount);
+            packet.AddChar(Weight);
+            Client.Send(packet);
+        }
+        public bool HasItem(short id, int amount)
+        {
+            foreach (Item item in Items)
+            {
+                if (item.Id == id && item.Amount >= amount)
+                    return true;
+            }
+            return false;
+        }
+        public int HasItem(short id)
+        {
+            foreach (Item item in Items)
+            {
+                if (item.Id == id)
+                    return item.Amount;
+            }
+            return 0;
+        }
+        public bool DelItem(short id, int amount, bool sendPacket = true)
+        {
+            foreach (Item item in Items)
+            {
+                if (item.Id == id)
+                {
+                    if (item.Amount < amount)
+                        return false;
+                    else if (item.Amount == amount)
+                        Items.Remove(item);
+                    else
+                        item.amount -= amount;
+                    if (!sendPacket)
+                        return true;
+                    Packet packet = new Packet(PacketFamily.Item, PacketAction.Kick);
+                    packet.AddShort(id);
+                    packet.AddInt(item.Amount);
+                    packet.AddChar(Weight);
+                    Client.Send(packet);
+                    return true;
+                }
+            }
+            return false;
+        }
+        public void PickItem(ushort id)
+        {
+            // TODO: Item distance check
+            MapItem item = Map.GetObjectByID<MapItem>(id);
+
+            if (item.Owner != this && item.UnprotectTime > DateTime.Now)
+                throw new Exception("Item is ptotected"); ;
+
+            AddItem(item.ItemId, item.Amount, false);
+
+            Map.Leave(item, WarpAnimation.None, this);
+
+            Packet packet = new Packet(PacketFamily.Item, PacketAction.Get);
+            packet.AddShort((short)item.Id);
+            packet.AddShort(item.ItemId);
+            packet.AddThree(item.Amount);
+            packet.AddChar(Weight);
+            packet.AddChar(MaxWeight);
+            Client.Send(packet);
+        }
+        public void DropItem(short id, int amount, byte x, byte y)
+        {
+            // TODO: Drop distance
+            if (!Walkable(x, y) && Admin == AdminLevel.Player)
+                return;
+
+            if (HasItem(id, amount))
+            {
+                if (!DelItem(id, amount, false))
+                    return;
+                MapItem item = new MapItem(Server, id, amount, this, MapId, x, y);
+                Map.Enter(item, WarpAnimation.None, this);
+                
+                Packet packet = new Packet(PacketFamily.Item, PacketAction.Drop);
+                packet.AddShort(id);
+                packet.AddThree(amount);
+                packet.AddInt(HasItem(id));
+                packet.AddShort((short)item.Id);
+                packet.AddChar(item.X);
+                packet.AddChar(item.Y);
+                packet.AddChar(Weight);
+                packet.AddChar(MaxWeight);
+                Client.Send(packet);
+            }
+        }
+#endregion
 
 #region Packet Builders
 		public override Packet AddToViewBuilder(WarpAnimation animation = WarpAnimation.None)
