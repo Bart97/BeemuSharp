@@ -7,6 +7,7 @@ using EOHax.EO.Communication;
 using EOHax.EO.Data;
 using EOHax.EOSERV.Data;
 using EOHax.Scripting;
+using Microsoft.WindowsAPICodePack.Taskbar;
 
 namespace EOHax.Programs.EOSERV
 {
@@ -64,9 +65,12 @@ namespace EOHax.Programs.EOSERV
 
 		public Server(IPAddress addr, ushort port)
 		{
+            if (Program.Taskbar != null)
+                Program.Taskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
 			ScriptHost = ScriptHost.Create();
 
 			socket = new TcpListener(addr, port);
+            Program.Logger.LogInfo(String.Format("Listening on {0}:{1}", addr, port));
 			thread = new Thread(AcceptClients);
 			Database = new Database("eoserv.db4o");
 			clients = new Dictionary<ushort, IClient>();
@@ -74,9 +78,13 @@ namespace EOHax.Programs.EOSERV
             characters = new List<Character>();
 
             ItemData = new EIF("./data/dat001.eif");
+            Program.Logger.LogSuccess(String.Format("Loaded {0} items", ItemData.Count));
             NpcData = new ENF("./data/dtn001.enf");
+            Program.Logger.LogSuccess(String.Format("Loaded {0} NPCs", NpcData.Count));
             ClassData = new ECF("./data/dat001.ecf");
+            Program.Logger.LogSuccess(String.Format("Loaded {0} classes", ClassData.Count));
             SpellData = new ESF("./data/dsl001.esf");
+            Program.Logger.LogSuccess(String.Format("Loaded {0} spells", SpellData.Count));
 			MapData = new MapDataSet("./data/maps/");
 
 			/*ItemData.GetPubFile("./tmp/");
@@ -89,6 +97,9 @@ namespace EOHax.Programs.EOSERV
 				entry.Value.GetPubFile("./tmp/");
 				maps.Add(entry.Key, new Map(entry.Value));
 			}
+            if (Program.Taskbar != null)
+                Program.Taskbar.SetProgressState(TaskbarProgressBarState.NoProgress);
+            Program.Logger.LogSuccess("Server started");
 		}
 
 		public void Start()

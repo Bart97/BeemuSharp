@@ -83,11 +83,7 @@ namespace EOHax.Scripting
 		/// Executes a Script object
 		/// </summary>
 		/// <param name="script"></param>
-		public object Execute(Script script)
-		{
-            return Execute(script, null);
-        }
-        public object Execute(Script script, Object obj)
+        public object Execute(Script script, Object obj = null, Object[] parameters = null)
         {
 			if (!script.Compiled)
 				throw new Exception("Script is not compiled");
@@ -111,7 +107,7 @@ namespace EOHax.Scripting
 			Console.WriteLine("entry = {0}", entry);
 			Console.WriteLine("assembly = {0}", script.assembly.FullName);
 
-			return entry.Invoke(obj, null);
+			return entry.Invoke(obj, parameters);
 		}
 		
 		public string[] GetLanguages()

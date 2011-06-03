@@ -7,6 +7,7 @@ using EOHax.EOSERV.Data;
 
 namespace EOHax.Programs.EOSERV
 {
+    [Serializable]
 	public class Map : IMap
 	{
 		private HashSet<IMapObject> objects = new HashSet<IMapObject>();

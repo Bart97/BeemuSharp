@@ -189,6 +189,9 @@ namespace EOHax.Programs.EOSERV
 			if (Character != null && Character.Map != null)
 				Character.Map.Leave(Character, WarpAnimation.None);
 
+            if (Character != null)
+                Character.Store();
+
 			if (client.Connected)
 				stream.Dispose();
 		}

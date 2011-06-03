@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Reflection;
 using EOHax.Logging;
+using Microsoft.WindowsAPICodePack.Taskbar;
 
 namespace EOHax.Programs.EOSERV
 {
@@ -11,9 +12,19 @@ namespace EOHax.Programs.EOSERV
 
 		public static ILogger Logger { get; private set; }
 
+        public static TaskbarManager Taskbar { get; private set; }
+
 		public static void Main(string[] args)
 		{
 			Logger = new ConsoleLogger();
+            try
+            {
+                Taskbar = TaskbarManager.Instance;
+            }
+            catch (PlatformNotSupportedException)
+            {
+                // Skip the taskbar stuff
+            }
             Console.WriteLine(
 @"
  ______   ____     _____ ______ _______      __ _  _   

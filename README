@@ -1,0 +1,7 @@
+Before trying to build the solution file located in ./Porgrams/EOSERV/ please follow these steps:
+1. Go to https://github.com/Bart13/BeemuSharp/downloads
+2. Download Microsoft.WindowsAPICodePack.rar file
+3. Extract it to the References folder
+4. You can remove the DELETE.ME file
+5. ???
+6. PROFIT!!!

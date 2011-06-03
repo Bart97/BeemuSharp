@@ -83,7 +83,7 @@ namespace EOHax.Programs.EOSERV
 		private Character second;
 		private bool legal;
 	}*/
-
+    [Serializable]
     public class Item : DatabaseObject
 	{
 		public short id;

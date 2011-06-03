@@ -25,6 +25,11 @@ namespace EOHax.Logging
 			Log(LogLevel.Info, message, ex);
 		}
 
+        public void LogSuccess(string message, Exception ex = null)
+        {
+            Log(LogLevel.Success, message, ex);
+        }
+
 		public void LogWarning(string message, Exception ex = null)
 		{
 			Log(LogLevel.Warning, message, ex);

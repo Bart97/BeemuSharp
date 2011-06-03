@@ -6,6 +6,7 @@ using EOHax.EOSERV.Data;
 
 namespace EOHax.Programs.EOSERV
 {
+    [Serializable]
 	public abstract class MapObject : DatabaseObject, IMapObject
 	{
 		// These have to be public to allow queries to work

@@ -39,6 +39,10 @@ namespace EOHax.Logging
 				LevelConfig[level] = new ConsoleLoggerLevelConfig();
 			}
 
+            LevelConfig[LogLevel.Info].ForegroundColor = ConsoleColor.White;
+
+            LevelConfig[LogLevel.Success].ForegroundColor = ConsoleColor.Green;
+
 			LevelConfig[LogLevel.Warning].ForegroundColor = ConsoleColor.Yellow;
 			LevelConfig[LogLevel.Warning].BackgroundColor = ConsoleColor.Black;
 

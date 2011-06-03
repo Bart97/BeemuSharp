@@ -35,7 +35,7 @@ namespace EOHax.Programs.EOSERV.Handlers
 					if (script.Compiled)
 					{
 						Program.Logger.LogDebug("Executing");
-						client.Server.ScriptHost.Execute(script);
+						client.Server.ScriptHost.Execute(script, null, new Object[]{client.Character});
 					}
 					else
 					{

@@ -9,6 +9,7 @@ using EOHax.EO.Data;
 
 namespace EOHax.Programs.EOSERV
 {
+    [Serializable]
 	public class Character : MapObject
 	{
 		// These have to be public to allow queries to work

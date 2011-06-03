@@ -7,8 +7,9 @@ namespace EOHax.Logging
 		Fatal   = 0,
 		Error   = 1,
 		Warning = 2,
-		Info    = 3,
-		Debug   = 4
+        Success = 3,
+		Info    = 4,
+		Debug   = 5
 	};
 
 	public interface ILogger
@@ -19,6 +20,7 @@ namespace EOHax.Logging
 
 		void LogDebug  (string message, Exception ex = null);
 		void LogInfo   (string message, Exception ex = null);
+        void LogSuccess(string message, Exception ex = null);
 		void LogWarning(string message, Exception ex = null);
 		void LogError  (string message, Exception ex = null);
 		void LogFatal  (string message, Exception ex = null);
