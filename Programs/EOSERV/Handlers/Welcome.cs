@@ -117,7 +117,7 @@ namespace EOHax.Programs.EOSERV.Handlers
 			reply.AddChar(client.Character.MaxWeight); // Max Weight
 			
 			// Inventory
-            foreach (Item item in client.Character.Items)
+            foreach (ItemStack item in client.Character.Items)
             {
                 reply.AddShort(item.Id);
                 reply.AddInt(item.Amount);

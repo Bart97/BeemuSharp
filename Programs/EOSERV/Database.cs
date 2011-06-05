@@ -83,13 +83,12 @@ namespace EOHax.Programs.EOSERV
 		private Character second;
 		private bool legal;
 	}*/
-    [Serializable]
+
     public class Item : DatabaseObject
 	{
 		public short id;
-		public int amount;
 
-		//[Transient] private EIF.Entry data;
+		[Transient] private EIF.Entry data;
 
         public short Id
         {
@@ -97,16 +96,27 @@ namespace EOHax.Programs.EOSERV
             private set { id = value; }
         }
 
+        public Item(IServer server, short id): base(server)
+        {
+            this.id = id;
+            data = Server.ItemData[(ushort)id];
+        }
+    }
+
+    public class ItemStack : Item
+    {
+        public int amount;
+
         public int Amount
         {
             get { return amount; }
             set { amount = value; }
         }
 
-        public Item(IServer server, short id, int amount): base(server)
+        public ItemStack(IServer server, short id, int amount)
+            : base(server, id)
         {
-            this.id = id;
-            this.amount = amount;
+            Amount = amount;
         }
     }
 

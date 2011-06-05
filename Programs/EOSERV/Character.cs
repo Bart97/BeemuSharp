@@ -37,13 +37,31 @@ namespace EOHax.Programs.EOSERV
         public byte       weight;
         public byte       maxWeight;
 
-        public List<Item> items;
+        public List<ItemStack> items;
         //public Citizenship citizenship = null;
 		//public Marriage marriage = null;
 		//public BankAccount bank = null;
-		//public GuildMembership guildMembership = null;
+        //public GuildMembership guildMembership = null;
 
-		[NonSerialized] private short maxSp;
+#region Paperdoll
+        public Item boots;
+        public Item accessory;
+        public Item gloves;
+        public Item belt;
+        public Item armor;
+        public Item necklace;
+        public Item hat;
+        public Item shield;
+        public Item weapon;
+        public Item ring1;
+        public Item ring2;
+        public Item armlet1;
+        public Item armlet2;
+        public Item bracer1;
+        public Item bracer2;
+#endregion
+
+        [NonSerialized] private short maxSp;
 
 #region Null Accessors
 		public string Name
@@ -184,37 +202,114 @@ namespace EOHax.Programs.EOSERV
             private set { maxWeight = value; }
         }
 
-        public List<Item> Items
+        public List<ItemStack> Items
         {
             get { return items; }
             private set { items = value; }
         }
 
-		/*public Citizenship Citizenship
-		{
-			get { return citizenship; }
-			private set { citizenship = value; }
-		}
+        /*public Citizenship Citizenship
+        {
+            get { return citizenship; }
+            private set { citizenship = value; }
+        }
 
-		public Marriage Marriage
-		{
-			get { return marriage; }
-			private set { marriage = value; }
-		}
+        public Marriage Marriage
+        {
+            get { return marriage; }
+            private set { marriage = value; }
+        }
 
-		public BankAccount Bank
-		{
-			get { return bank; }
-			private set { bank = value; }
-		}
+        public BankAccount Bank
+        {
+            get { return bank; }
+            private set { bank = value; }
+        }
 
-		public GuildMembership GuildMembership
-		{
-			get { return guildMembership; }
-			private set { guildMembership = value; }
-		}*/
+        public GuildMembership GuildMembership
+        {
+            get { return guildMembership; }
+            private set { guildMembership = value; }
+        }*/
 
-		public short MaxSp
+#region Inventory Null Accessors
+        public Item Boots
+        {
+            get { return boots; }
+            private set { boots = value; }
+        }
+        public Item Accessory
+        {
+            get { return accessory; }
+            private set { accessory = value; }
+        }
+        public Item Gloves
+        {
+            get { return gloves; }
+            private set { gloves = value; }
+        }
+        public Item Belt
+        {
+            get { return belt; }
+            private set { belt = value; }
+        }
+        public Item Armor
+        {
+            get { return armor; }
+            private set { armor = value; }
+        }
+        public Item Necklace
+        {
+            get { return necklace; }
+            private set { necklace = value; }
+        }
+        public Item Hat
+        {
+            get { return hat; }
+            private set { hat = value; }
+        }
+        public Item Shield
+        {
+            get { return shield; }
+            private set { shield = value; }
+        }
+        public Item Weapon
+        {
+            get { return weapon; }
+            private set { weapon = value; }
+        }
+        public Item Ring1
+        {
+            get { return ring1; }
+            private set { ring1 = value; }
+        }
+        public Item Ring2
+        {
+            get { return ring2; }
+            private set { ring2 = value; }
+        }
+        public Item Armlet1
+        {
+            get { return armlet1; }
+            private set { armlet1 = value; }
+        }
+        public Item Armlet2
+        {
+            get { return armlet2; }
+            private set { armlet2 = value; }
+        }
+        public Item Bracer1
+        {
+            get { return bracer1; }
+            private set { bracer1 = value; }
+        }
+        public Item Bracer2
+        {
+            get { return bracer2; }
+            private set { bracer2 = value; }
+        }
+#endregion
+        public short MaxSp
 		{
 			get { return maxSp; }
 			private set { maxSp = value; }
@@ -240,7 +335,7 @@ namespace EOHax.Programs.EOSERV
 			HairStyle = hairStyle;
 			HairColor = hairColor;
 			Skin = skin;
-            Items = new List<Item>();
+            Items = new List<ItemStack>();
 
 			// TODO: Get default from server
 			MapId = "SAUSAGE_CASTLE_OUTSIDE";
@@ -262,10 +357,10 @@ namespace EOHax.Programs.EOSERV
             if (this.Items == null)
             {
                 Program.Logger.LogWarning("Item list was null. Recreating");
-                this.Items = new List<Item>();
+                this.Items = new List<ItemStack>();
                 Server.Database.Commit();
             }
-            foreach (Item item in items)
+            foreach (ItemStack item in items)
             {
                 item.Activate(server);
             }
@@ -280,6 +375,23 @@ namespace EOHax.Programs.EOSERV
 			//SafeStore(marriage);
 			//SafeStore(bank);
 			//SafeStore(guildMembership);
+
+            SafeStore(boots);
+            SafeStore(accessory);
+            SafeStore(gloves);
+            SafeStore(belt);
+            SafeStore(armor);
+            SafeStore(necklace);
+            SafeStore(hat);
+            SafeStore(shield);
+            SafeStore(weapon);
+            SafeStore(ring1);
+            SafeStore(ring2);
+            SafeStore(armlet1);
+            SafeStore(armlet2);
+            SafeStore(bracer1);
+            SafeStore(bracer2);
+
             Server.Database.Commit();
 		}
 #endregion
@@ -388,7 +500,7 @@ namespace EOHax.Programs.EOSERV
 #region Item Related Functions
         public void AddItem(short id, int amount, bool sendPacket = true)
         {
-            foreach (Item item in items)
+            foreach (ItemStack item in items)
             {
                 if (item.Id == id)
                 {
@@ -399,7 +511,7 @@ namespace EOHax.Programs.EOSERV
                 }
             }
 
-            Item newItem = new Item(Client.Server, id, amount);
+            ItemStack newItem = new ItemStack(Client.Server, id, amount);
             Items.Add(newItem);
             newItem.Store();
             Store();
@@ -413,27 +525,30 @@ namespace EOHax.Programs.EOSERV
             packet.AddChar(Weight);
             Client.Send(packet);
         }
+
         public bool HasItem(short id, int amount)
         {
-            foreach (Item item in Items)
+            foreach (ItemStack item in Items)
             {
                 if (item.Id == id && item.Amount >= amount)
                     return true;
             }
             return false;
         }
+
         public int HasItem(short id)
         {
-            foreach (Item item in Items)
+            foreach (ItemStack item in Items)
             {
                 if (item.Id == id)
                     return item.Amount;
             }
             return 0;
         }
+
         public bool DelItem(short id, int amount, bool sendPacket = true)
         {
-            foreach (Item item in Items)
+            foreach (ItemStack item in Items)
             {
                 if (item.Id == id)
                 {
@@ -455,6 +570,7 @@ namespace EOHax.Programs.EOSERV
             }
             return false;
         }
+
         public void PickItem(ushort id)
         {
             // TODO: Item distance check
@@ -475,6 +591,7 @@ namespace EOHax.Programs.EOSERV
             packet.AddChar(MaxWeight);
             Client.Send(packet);
         }
+
         public void DropItem(short id, int amount, byte x, byte y)
         {
             // TODO: Drop distance

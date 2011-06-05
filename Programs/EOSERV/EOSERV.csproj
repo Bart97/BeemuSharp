@@ -94,6 +94,7 @@
     <Compile Include="Handlers\Emote.cs" />
     <Compile Include="Handlers\Face.cs" />
     <Compile Include="Handlers\Item.cs" />
+    <Compile Include="Handlers\PaperDoll.cs" />
     <Compile Include="Handlers\Players.cs" />
     <Compile Include="Handlers\Talk.cs" />
     <Compile Include="IClient.cs" />
