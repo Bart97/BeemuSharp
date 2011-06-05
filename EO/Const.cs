@@ -193,4 +193,10 @@ namespace EOHax.EO
 		Progress = 1,
 		History = 2
 	}
+
+    public enum SkillMasterReply : byte
+    {
+        GetNaked = 1, // TODO: Better name?
+        WrongClass = 2
+    }
 }
