@@ -2,7 +2,6 @@
 
 namespace EOHax.Programs.EOSERV
 {
-    [Serializable]
 	public class DatabaseObject
 	{
 		[NonSerialized] private IServer server;

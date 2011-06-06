@@ -158,7 +158,7 @@ namespace EOHax.EO.Data
         {
             get
             {
-                if (id > data.Count) return (Entry)data[id];
+                if (id <= Count) return (Entry)data[id];
                 else return null;
             }
         }

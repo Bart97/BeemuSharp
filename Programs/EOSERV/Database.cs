@@ -96,10 +96,22 @@ namespace EOHax.Programs.EOSERV
             private set { id = value; }
         }
 
+        public EIF.Entry Data
+        {
+            get { return data; }
+        }
+
         public Item(IServer server, short id): base(server)
         {
             this.id = id;
-            data = Server.ItemData[(ushort)id];
+            data = Server.ItemData[(ushort)(id - 1)];
+        }
+
+        public new void Activate(IServer server)
+        {
+            base.Activate(server);
+
+            data = Server.ItemData[(ushort)(id - 1)];
         }
     }
 

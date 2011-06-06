@@ -45,7 +45,7 @@ namespace EOHax.Programs.EOSERV
 
 #region Paperdoll
         public Item boots;
-        public Item accessory;
+        public Item charm;
         public Item gloves;
         public Item belt;
         public Item armor;
@@ -238,10 +238,10 @@ namespace EOHax.Programs.EOSERV
             get { return boots; }
             private set { boots = value; }
         }
-        public Item Accessory
+        public Item Charm
         {
-            get { return accessory; }
-            private set { accessory = value; }
+            get { return charm; }
+            private set { charm = value; }
         }
         public Item Gloves
         {
@@ -354,16 +354,40 @@ namespace EOHax.Programs.EOSERV
 			//SafeActivate(marriage);
 			//SafeActivate(bank);
 			//SafeActivate(guildMembership);
-            if (this.Items == null)
-            {
-                Program.Logger.LogWarning("Item list was null. Recreating");
-                this.Items = new List<ItemStack>();
-                Server.Database.Commit();
-            }
             foreach (ItemStack item in items)
             {
                 item.Activate(server);
             }
+            if (boots != null)
+                boots.Activate(server);
+            if (charm != null)
+                charm.Activate(server);
+            if (gloves != null)
+                gloves.Activate(server);
+            if (belt != null)
+                belt.Activate(server);
+            if (armor != null)
+                armor.Activate(server);
+            if (necklace != null)
+                necklace.Activate(server);
+            if (hat != null)
+                hat.Activate(server);
+            if (shield != null)
+                shield.Activate(server);
+            if (weapon != null)
+                weapon.Activate(server);
+            if (ring1 != null)
+                ring1.Activate(server);
+            if (ring2 != null)
+                ring2.Activate(server);
+            if (armlet1 != null)
+                armlet1.Activate(server);
+            if (armlet2 != null)
+                armlet2.Activate(server);
+            if (bracer1 != null)
+                bracer1.Activate(server);
+            if (bracer2 != null)
+                bracer2.Activate(server);
 		}
 
 		public new void Store()
@@ -377,7 +401,7 @@ namespace EOHax.Programs.EOSERV
 			//SafeStore(guildMembership);
 
             SafeStore(boots);
-            SafeStore(accessory);
+            SafeStore(charm);
             SafeStore(gloves);
             SafeStore(belt);
             SafeStore(armor);
@@ -496,6 +520,227 @@ namespace EOHax.Programs.EOSERV
             packet.AddChar((byte)emote);
             SendInRange(packet, echo);
         }
+
+#region Paperdoll
+        public void Equip(short item, byte subloc)
+        {
+            if (item == 0) throw new ArgumentException("Tried to equip not existing item.");
+            if (subloc < 0 || subloc > 1) throw new ArgumentOutOfRangeException("Subloc out of range.");
+            switch (Server.ItemData[(ushort)(item - 1)].type)
+            {
+                case EIF.Type.Charm:
+                    GenericEquip(ref charm, item);
+                    break;
+
+                case EIF.Type.Gloves:
+                    GenericEquip(ref gloves, item);
+                    break;
+
+                case EIF.Type.Belt:
+                    GenericEquip(ref belt, item);
+                    break;
+
+                case EIF.Type.Armor:
+                    GenericEquip(ref armor, item);
+                    break;
+
+                case EIF.Type.Necklace:
+                    GenericEquip(ref necklace, item);
+                    break;
+
+                case EIF.Type.Hat:
+                    GenericEquip(ref hat, item);
+                    break;
+
+                case EIF.Type.Shield:
+                    GenericEquip(ref shield, item);
+                    break;
+
+                case EIF.Type.Weapon:
+                    GenericEquip(ref weapon, item);
+                    break;
+
+                case EIF.Type.Ring:
+                    if (subloc == 0)
+                        GenericEquip(ref ring1, item);
+                    else
+                        GenericEquip(ref ring2, item);
+                    break;
+
+                case EIF.Type.Armlet:
+                    if (subloc == 0)
+                        GenericEquip(ref armlet1, item);
+                    else
+                        GenericEquip(ref armlet2, item);
+                    break;
+
+                case EIF.Type.Bracer:
+                    if (subloc == 0)
+                        GenericEquip(ref bracer1, item);
+                    else
+                        GenericEquip(ref bracer2, item);
+                    break;
+
+                default:
+                    return;
+            }
+
+            Packet packet = new Packet(PacketFamily.PaperDoll, PacketAction.Agree);
+            packet.AddShort((short)Id);
+            packet.AddChar((byte)AvatarSlot.Clothes);
+            packet.AddChar(0); // wut?
+            packet.AddShort((short)(Boots  != null ? Boots.Data.special1  : 0));
+            packet.AddShort((short)(Armor  != null ? Armor.Data.special1  : 0));
+            packet.AddShort((short)(Hat    != null ? Hat.Data.special1    : 0));
+            packet.AddShort((short)(Weapon != null ? Weapon.Data.special1 : 0));
+            packet.AddShort((short)(Shield != null ? Shield.Data.special1 : 0));
+            packet.AddShort(item);
+            packet.AddShort((short)HasItem(item));
+            packet.AddChar(subloc);
+            packet.AddShort(MaxHp);
+            packet.AddShort(MaxTp);
+            packet.AddShort(Strength);
+            packet.AddShort(Intelligence);
+            packet.AddShort(Wisdom);
+            packet.AddShort(Agility);
+            packet.AddShort(Constitution);
+            packet.AddShort(Charisma);
+            packet.AddShort(MinDamage);
+            packet.AddShort(MaxDamage);
+            packet.AddShort(Accuracy);
+            packet.AddShort(Evade);
+            packet.AddShort(Defence);
+            Client.Send(packet);
+
+            Packet _packet = new Packet(PacketFamily.Avatar, PacketAction.Agree);
+            _packet.AddShort((short)Id);
+            _packet.AddChar((byte)AvatarSlot.Clothes);
+            _packet.AddChar(subloc);
+            _packet.AddShort((short)(Boots  != null ? Boots.Data.special1  : 0));
+            _packet.AddShort((short)(Armor  != null ? Armor.Data.special1  : 0));
+            _packet.AddShort((short)(Hat    != null ? Hat.Data.special1    : 0));
+            _packet.AddShort((short)(Weapon != null ? Weapon.Data.special1 : 0));
+            _packet.AddShort((short)(Shield != null ? Shield.Data.special1 : 0));
+            SendInRange(_packet, false);
+        }
+
+        private void GenericEquip(ref Item item, short id)
+        {
+            DelItem(id, 1, false);
+            item = new Item(Server, id);
+            CalculateStats();
+            Store();
+        }
+
+        public void Unequip(short item, byte subloc)
+        {
+            if (item == 0) throw new ArgumentException("Tried to unequip not existing item.");
+            if (subloc < 0 || subloc > 1) throw new ArgumentOutOfRangeException("Subloc out of range.");
+            switch (Server.ItemData[(ushort)(item - 1)].type)
+            {
+                case EIF.Type.Charm:
+                    GenericUnequip(ref charm);
+                    break;
+
+                case EIF.Type.Gloves:
+                    GenericUnequip(ref gloves);
+                    break;
+
+                case EIF.Type.Belt:
+                    GenericUnequip(ref belt);
+                    break;
+
+                case EIF.Type.Armor:
+                    GenericUnequip(ref armor);
+                    break;
+
+                case EIF.Type.Necklace:
+                    GenericUnequip(ref necklace);
+                    break;
+
+                case EIF.Type.Hat:
+                    GenericUnequip(ref hat);
+                    break;
+
+                case EIF.Type.Shield:
+                    GenericUnequip(ref shield);
+                    break;
+
+                case EIF.Type.Weapon:
+                    GenericUnequip(ref weapon);
+                    break;
+
+                case EIF.Type.Ring:
+                    if (subloc == 0)
+                        GenericUnequip(ref ring1);
+                    else
+                        GenericUnequip(ref ring2);
+                    break;
+
+                case EIF.Type.Armlet:
+                    if (subloc == 0)
+                        GenericUnequip(ref armlet1);
+                    else
+                        GenericUnequip(ref armlet2);
+                    break;
+
+                case EIF.Type.Bracer:
+                    if (subloc == 0)
+                        GenericUnequip(ref bracer1);
+                    else
+                        GenericUnequip(ref bracer2);
+                    break;
+
+                default:
+                    return;
+            }
+
+            Packet packet = new Packet(PacketFamily.PaperDoll, PacketAction.Remove);
+            packet.AddShort((short)Id);
+            packet.AddChar((byte)AvatarSlot.Clothes);
+            packet.AddChar(0); // wut?
+            packet.AddShort((short)(Boots  != null ? Boots.Data.special1  : 0));
+            packet.AddShort((short)(Armor  != null ? Armor.Data.special1  : 0));
+            packet.AddShort((short)(Hat    != null ? Hat.Data.special1    : 0));
+            packet.AddShort((short)(Weapon != null ? Weapon.Data.special1 : 0));
+            packet.AddShort((short)(Shield != null ? Shield.Data.special1 : 0));
+            packet.AddShort(item);
+            packet.AddChar(subloc);
+            packet.AddShort(MaxHp);
+            packet.AddShort(MaxTp);
+            packet.AddShort(Strength);
+            packet.AddShort(Intelligence);
+            packet.AddShort(Wisdom);
+            packet.AddShort(Agility);
+            packet.AddShort(Constitution);
+            packet.AddShort(Charisma);
+            packet.AddShort(MinDamage);
+            packet.AddShort(MaxDamage);
+            packet.AddShort(Accuracy);
+            packet.AddShort(Evade);
+            packet.AddShort(Defence);
+            Client.Send(packet);
+
+            Packet _packet = new Packet(PacketFamily.Avatar, PacketAction.Agree);
+            _packet.AddShort((short)Id);
+            _packet.AddChar((byte)AvatarSlot.Clothes);
+            _packet.AddChar(subloc);
+            _packet.AddShort((short)(Boots  != null ? Boots.Data.special1  : 0));
+            _packet.AddShort((short)(Armor  != null ? Armor.Data.special1  : 0));
+            _packet.AddShort((short)(Hat    != null ? Hat.Data.special1    : 0));
+            _packet.AddShort((short)(Weapon != null ? Weapon.Data.special1 : 0));
+            _packet.AddShort((short)(Shield != null ? Shield.Data.special1 : 0));
+            SendInRange(_packet, false);
+        }
+
+        private void GenericUnequip(ref Item item)
+        {
+            AddItem(item.Id, 1, false);
+            item = null;
+            CalculateStats();
+            Store();
+        }
+#endregion
 
 #region Item Related Functions
         public void AddItem(short id, int amount, bool sendPacket = true)
@@ -676,15 +921,15 @@ namespace EOHax.Programs.EOSERV
 			packet.AddShort(Hp);
 			packet.AddShort(MaxTp);
 			packet.AddShort(Tp);
-			packet.AddShort(2); // paperdoll
+            packet.AddShort((short)(Boots != null ? Boots.Data.special1 : 0));
+            packet.AddShort(0);
 			packet.AddShort(0);
 			packet.AddShort(0);
-			packet.AddShort(0);
-			packet.AddShort(2);
-			packet.AddShort(0);
-			packet.AddShort(2);
-			packet.AddShort(2);
-			packet.AddShort(2); // /paperdoll
+            packet.AddShort((short)(Armor != null ? Armor.Data.special1 : 0));
+            packet.AddShort(0);
+            packet.AddShort((short)(Hat != null ? Hat.Data.special1 : 0));
+            packet.AddShort((short)(Shield != null ? Shield.Data.special1 : 0));
+            packet.AddShort((short)(Weapon != null ? Weapon.Data.special1 : 0));
 			packet.AddChar((byte)sitState);
 			packet.AddChar(0); // Hidden
 		}
