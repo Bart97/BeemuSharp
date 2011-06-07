@@ -61,11 +61,11 @@ namespace EOHax.Programs.EOSERV.Handlers
 				reply.AddChar((byte)character.HairColor);
 				reply.AddChar((byte)character.Skin);
 				reply.AddChar(4); // Admin Level
-                packet.AddShort((short)(character.Boots  != null ? character.Boots.Data.special1  : 0));
-                packet.AddShort((short)(character.Armor  != null ? character.Armor.Data.special1  : 0));
-                packet.AddShort((short)(character.Hat    != null ? character.Hat.Data.special1    : 0));
-                packet.AddShort((short)(/*character.Weapon != null ? character.Weapon.Data.special1 : */0));
-                packet.AddShort((short)(character.Shield != null ? character.Shield.Data.special1 : 0));
+                reply.AddShort((short)(character.Boots  != null ? character.Boots.Data.special1  : 0));
+                reply.AddShort((short)(character.Armor  != null ? character.Armor.Data.special1  : 0));
+                reply.AddShort((short)(character.Hat    != null ? character.Hat.Data.special1    : 0));
+                reply.AddShort((short)(character.Shield != null ? character.Shield.Data.special1 : 0));
+                reply.AddShort((short)(character.Weapon != null ? character.Weapon.Data.special1 : 0));
 				reply.AddBreak();
 			}
 			
