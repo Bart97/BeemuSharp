@@ -25,7 +25,7 @@ namespace EOHax.Programs.EOSERV.Handlers
 			reply.AddShort((short)WelcomeReply.CharacterInfo);
 			reply.AddShort((short)client.Id);
 			reply.AddInt(id);
-			reply.AddShort((short)client.Character.Map.Data.PubId);
+			reply.AddShort((short)client.Character.Map.Data.Id);
 
 			reply.AddBytes(client.Character.Map.Data.RevisionID);
 			reply.AddThree((int)client.Character.Map.Data.PubFileLength);

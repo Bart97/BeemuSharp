@@ -44,7 +44,7 @@ namespace EOHax.Programs.EOSERV
             get { return (Owner != null ? Owner.Client.Id : 0); }
         }
 
-        public MapItem(IServer server, short id, int amount, Character owner, string mapId, byte x, byte y)
+        public MapItem(IServer server, short id, int amount, Character owner, ushort mapId, byte x, byte y)
             : base(server, null)
         {
             ItemId = id;

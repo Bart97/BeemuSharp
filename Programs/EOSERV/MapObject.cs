@@ -10,7 +10,7 @@ namespace EOHax.Programs.EOSERV
 	public abstract class MapObject : DatabaseObject, IMapObject
 	{
 		// These have to be public to allow queries to work
-		public string mapId;
+		public ushort mapId;
 		public byte x;
 		public byte y;
 		public Direction direction = Direction.Down;
@@ -26,7 +26,7 @@ namespace EOHax.Programs.EOSERV
 		[NonSerialized] private short   evade;
 		[NonSerialized] private short   defence;
 #region Null Accessors
-		public string MapId
+		public ushort MapId
 		{
 			get { return mapId; }
 			protected set { mapId = value; }

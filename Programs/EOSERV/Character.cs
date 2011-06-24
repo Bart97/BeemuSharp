@@ -338,7 +338,7 @@ namespace EOHax.Programs.EOSERV
             Items = new List<ItemStack>();
 
 			// TODO: Get default from server
-			MapId = "SAUSAGE_CASTLE_OUTSIDE";
+			MapId = 1;
 			X = 10;
 			Y = 10;
 		}
@@ -906,7 +906,7 @@ namespace EOHax.Programs.EOSERV
 		{
 			packet.AddBreakString(Name);
 			packet.AddShort((short)Client.Id);
-			packet.AddShort((short)Map.Data.PubId);
+			packet.AddShort((short)Map.Data.Id);
 			packet.AddShort(X);
 			packet.AddShort(Y);
 			packet.AddChar((byte)Direction);

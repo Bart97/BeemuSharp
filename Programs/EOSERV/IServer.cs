@@ -8,17 +8,17 @@ namespace EOHax.Programs.EOSERV
 {
 	public interface IServer
 	{
-		EIF  ItemData  { get; }
-		ENF   NpcData   { get; }
-		ECF ClassData { get; }
-		ESF SpellData { get; }
+		EIF          ItemData  { get; }
+		ENF          NpcData   { get; }
+		ECF          ClassData { get; }
+		ESF          SpellData { get; }
 		MapDataSet   MapData   { get; }
 		Database     Database  { get; }
 
 		ScriptHost ScriptHost { get; }
 
 		IDictionary<ushort, IClient> Clients { get; }
-		IDictionary<string, IMap>    Maps    { get; }
+		IDictionary<ushort, IMap>    Maps    { get; }
         List<Character> Characters { get; }
 
 		void Start();

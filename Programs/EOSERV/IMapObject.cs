@@ -14,7 +14,7 @@ namespace EOHax.Programs.EOSERV
 
 	public interface IMapObject
 	{
-		string    MapId     { get; }
+		ushort    MapId     { get; }
 		byte      X         { get; }
 		byte      Y         { get; }
 		Direction Direction { get; }

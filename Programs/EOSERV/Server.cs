@@ -17,7 +17,7 @@ namespace EOHax.Programs.EOSERV
 		private TcpListener socket;
 		private Thread thread;
 		private Dictionary<ushort, IClient> clients;
-		private Dictionary<string, IMap> maps;
+		private Dictionary<ushort, IMap> maps;
         private List<Character> characters;
 
 		public EIF ItemData { get; private set; }
@@ -34,7 +34,7 @@ namespace EOHax.Programs.EOSERV
 			get { return clients; }
 		}
 
-		public IDictionary<string, IMap> Maps
+		public IDictionary<ushort, IMap> Maps
 		{
 			get { return maps; }
 		}
@@ -74,7 +74,7 @@ namespace EOHax.Programs.EOSERV
 			thread = new Thread(AcceptClients);
 			Database = new Database("eoserv.db4o");
 			clients = new Dictionary<ushort, IClient>();
-			maps = new Dictionary<string, IMap>();
+			maps = new Dictionary<ushort, IMap>();
             characters = new List<Character>();
 
             ItemData = new EIF("./data/dat001.eif");
@@ -86,13 +86,14 @@ namespace EOHax.Programs.EOSERV
             SpellData = new ESF("./data/dsl001.esf");
             Program.Logger.LogSuccess(String.Format("Loaded {0} spells", SpellData.Count));
 			MapData = new MapDataSet("./data/maps/");
+            Program.Logger.LogSuccess(String.Format("Loaded {0} maps", MapData.Count));
 
 			/*ItemData.GetPubFile("./tmp/");
 			NpcData.GetPubFile("./tmp/");
 			ClassData.GetPubFile("./tmp/");
 			SpellData.GetPubFile("./tmp/");*/
 
-			foreach (KeyValuePair<string, MapData> entry in MapData)
+			foreach (KeyValuePair<ushort, MapData> entry in MapData)
 			{
 				entry.Value.GetPubFile("./tmp/");
 				maps.Add(entry.Key, new Map(entry.Value));

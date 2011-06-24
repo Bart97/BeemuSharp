@@ -89,9 +89,8 @@ namespace EOHax.EOSERV.Data
 		public long PubFileLength { get; private set; }
 		public bool PubGenerated { get; private set; }
 
-		public string Id { get; private set; }
 		public string Name { get; private set; }
-		public ushort PubId { get; private set; }
+		public ushort Id { get; private set; }
 
 		private EMF emf;
 
@@ -143,25 +142,19 @@ namespace EOHax.EOSERV.Data
 			ResetTiles();
 		}
 
-		private MapData(string id)
+		private MapData(ushort id)
 		{
 			SetId(id);
 		}
 
-		public MapData(string id, EMF emf) : this(id)
+		public MapData(ushort id, EMF emf) : this(id)
 		{
 			SetEMF(emf);
 		}
 
-		private void SetId(string id)
+		private void SetId(ushort id)
 		{
 			Id = id;
-
-			using (CRC32 hash = new CRC32())
-			{
-				byte[] hashResult = hash.ComputeHash(ASCIIEncoding.ASCII.GetBytes(Id));
-				PubId = (ushort)(hashResult[0] * 256 + hashResult[1]);
-			}
 		}
 
 		private void SetEMF(EMF emf)
@@ -200,7 +193,7 @@ namespace EOHax.EOSERV.Data
 
 		public static MapData ProcessXmlEntry(XElement xml, string directory)
 		{
-			MapData entry = new MapData(xml.Attribute("id").Value);
+			MapData entry = new MapData((ushort)Convert.ToInt16(xml.Attribute("id").Value));
 
 			foreach (XElement xmlInfo in xml.Elements())
 			{
@@ -231,7 +224,7 @@ namespace EOHax.EOSERV.Data
 			if (PubGenerated)
 				return pubFileName;
 
-			string fileNameBase = String.Format("{0:00000}.emf", PubId);
+			string fileNameBase = String.Format("{0:00000}.emf", Id);
 
 			EMF emf = new EMF()
 			{
@@ -260,11 +253,11 @@ namespace EOHax.EOSERV.Data
 		}
 	}
 
-	public class MapDataSet : IEnumerable<KeyValuePair<string, MapData>>
+	public class MapDataSet : IEnumerable<KeyValuePair<ushort, MapData>>
 	{
-		private Dictionary<string, MapData> data = new Dictionary<string, MapData>();
+        private Dictionary<ushort, MapData> data = new Dictionary<ushort, MapData>();
 
-		IEnumerator<KeyValuePair<string, MapData>> IEnumerable<KeyValuePair<string, MapData>>.GetEnumerator()
+        IEnumerator<KeyValuePair<ushort, MapData>> IEnumerable<KeyValuePair<ushort, MapData>>.GetEnumerator()
 		{
 			return data.GetEnumerator();
 		}
@@ -273,6 +266,11 @@ namespace EOHax.EOSERV.Data
 		{
 			return data.GetEnumerator();
 		}
+
+        public int Count
+        {
+            get { return data.Count; }
+        }
 
 		/// <summary>
 		/// Creates an empty data set
@@ -297,15 +295,10 @@ namespace EOHax.EOSERV.Data
 		/// <param name="directory">Directory to scan for XML files</param>
 		public void Load(string directory)
 		{
-			foreach (string filename in Directory.EnumerateFiles(directory, "*.xml", SearchOption.AllDirectories))
+			foreach (string filename in Directory.EnumerateFiles(directory, "*.emf", SearchOption.AllDirectories))
 			{
-				XElement xml = XElement.Load(filename);
-
-				foreach (XElement xmlItem in xml.Elements())
-				{
-					var entry = MapData.ProcessXmlEntry(xmlItem, Path.GetDirectoryName(filename));
-					data.Add(entry.Id, entry);
-				}
+                var entry = new MapData((ushort)Convert.ToInt16(Path.GetFileNameWithoutExtension(filename)), new EMF(filename));
+				data.Add(entry.Id, entry);
 			}
 		}
 	}
