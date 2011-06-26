@@ -13,7 +13,7 @@ namespace EOHax.EOSERV.Data
 	{
 		private ushort door;
 
-		public string mapId;
+		public ushort mapId;
 		public byte x;
 		public byte y;
 		public byte levelRequirement;
@@ -152,6 +152,17 @@ namespace EOHax.EOSERV.Data
 			SetEMF(emf);
 		}
 
+        public MapData(ushort id, string filename) : this(id)
+        {
+            SetEMF(new EMF(filename));
+
+            PubGenerated = true;
+            pubFileName = filename;
+            RevisionID = emf.revisionId;
+            FileInfo info = new FileInfo(pubFileName);
+            PubFileLength = info.Length;
+        }
+
 		private void SetId(ushort id)
 		{
 			Id = id;
@@ -161,7 +172,7 @@ namespace EOHax.EOSERV.Data
 		{
 			this.emf = emf;
 
-			Tiles = new Tile[emf.height, emf.width];
+			Tiles = new Tile[emf.height + 1, emf.width + 1]; // TODO: Move the +1 crap to EMF.Load?
 
 			foreach (EMF.TileRow row in emf.tileRows)
 			{
@@ -177,10 +188,13 @@ namespace EOHax.EOSERV.Data
 				{
 					MapWarp warp = new MapWarp()
 					{
+                        mapId = tile.warpMap,
+                        x = tile.warpX,
+                        y = tile.warpY,
 						Door = (tile.door > 0),
 						Locked = (tile.door > 1)
 					};
-
+                    Console.WriteLine(String.Format("Warp leading to: m={0} x={1} y={2}", warp.mapId, warp.x, warp.y));
 					if (warp.Locked)
 						warp.Key = (ushort)(tile.door - 1);
 
@@ -297,7 +311,7 @@ namespace EOHax.EOSERV.Data
 		{
 			foreach (string filename in Directory.EnumerateFiles(directory, "*.emf", SearchOption.AllDirectories))
 			{
-                var entry = new MapData((ushort)Convert.ToInt16(Path.GetFileNameWithoutExtension(filename)), new EMF(filename));
+                var entry = new MapData((ushort)Convert.ToInt16(Path.GetFileNameWithoutExtension(filename)), filename);
 				data.Add(entry.Id, entry);
 			}
 		}

@@ -36,6 +36,8 @@ namespace EOHax.Programs.EOSERV
 		public int        usage;
         public byte       weight;
         public byte       maxWeight;
+        bool              warping;
+        WarpAnimation     warpAnimation = WarpAnimation.None;
 
         public List<ItemStack> items;
         //public Citizenship citizenship = null;
@@ -314,6 +316,22 @@ namespace EOHax.Programs.EOSERV
 			get { return maxSp; }
 			private set { maxSp = value; }
 		}
+
+        public bool Warping
+        {
+            get { return warping; }
+            set
+            {
+                warping = value;
+                warpAnimation = WarpAnimation.None;
+            }
+        }
+
+        public WarpAnimation WarpAnimation
+        {
+            get { return warpAnimation; }
+            private set { warpAnimation = value; }
+        }
 #endregion
 
 		public bool Online
@@ -507,6 +525,35 @@ namespace EOHax.Programs.EOSERV
 				}
 			}
 		}
+
+        public override void Warp(ushort map, byte x, byte y, WarpAnimation animation = WarpAnimation.None)
+        {
+            lock (this)
+            lock (Map)
+            {
+                this.Warping = true;
+                this.WarpAnimation = animation;
+                Packet packet = new Packet(PacketFamily.Warp, PacketAction.Request);
+                if (this.MapId == map)
+                {
+                    packet.AddChar((byte)WarpReply.Local);
+                    packet.AddShort((short)map);
+                    packet.AddChar(x);
+                    packet.AddChar(y);
+                }
+                else
+                {
+                    packet.AddChar((byte)WarpReply.Switch);
+                    packet.AddShort((short)map);
+                    packet.AddBytes(Map.Data.RevisionID);
+                    packet.AddThree((int)Map.Data.PubFileLength);
+                    packet.AddChar(0); // ?
+                    packet.AddChar(0); // ?
+                }
+                base.Warp(map, x, y, animation);
+                Client.Send(packet);
+            }
+        }
 
 		public void Refresh()
 		{

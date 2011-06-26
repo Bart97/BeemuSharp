@@ -97,6 +97,7 @@
     <Compile Include="Handlers\PaperDoll.cs" />
     <Compile Include="Handlers\Players.cs" />
     <Compile Include="Handlers\Talk.cs" />
+    <Compile Include="Handlers\Warp.cs" />
     <Compile Include="IClient.cs" />
     <Compile Include="IMap.cs" />
     <Compile Include="IMapObject.cs" />
@@ -185,14 +186,12 @@
     <Folder Include="tmp\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="data\maps\Sausage Castle\Outside.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="data\maps\Sausage Castle\Outside.emf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="data\dat001.ecf" />
+    <None Include="data\dat001.eif" />
+    <None Include="data\dsl001.esf" />
+    <None Include="data\dtn001.enf" />
+    <None Include="data\maps\00002.emf" />
+    <None Include="data\maps\Sausage Castle\00001.emf" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -40,6 +40,7 @@ namespace EOHax.Programs.EOSERV
 		void CalculateStats();
 
 		bool Walk(Direction direction, WalkType type = WalkType.Normal, bool echo = true);
+        void Warp(ushort map, byte x, byte y, WarpAnimation animation = WarpAnimation.None);
 
 		Packet AddToViewBuilder     (WarpAnimation animation = WarpAnimation.None);
 		Packet DeleteFromViewBuilder(WarpAnimation animation = WarpAnimation.None);

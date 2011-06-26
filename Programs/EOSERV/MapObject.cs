@@ -215,13 +215,42 @@ namespace EOHax.Programs.EOSERV
 			
 			if (Walkable(targetX, targetY))
 			{
+                if (Map.Data.Tiles[targetY, targetX].warp != null)
+                {
+                    Warp(Map.Data.Tiles[targetY, targetX].warp.Value.mapId,
+                         Map.Data.Tiles[targetY, targetX].warp.Value.x, Map.Data.Tiles[targetY, targetX].warp.Value.y);
+                    return false;
+                }
 				X = targetX;
 				Y = targetY;
 				Direction = direction;
+
+                return true;
 			}
 
-			return true;
+			return false;
 		}
+
+        public virtual void Warp(ushort map, byte x, byte y, WarpAnimation animation = WarpAnimation.None)
+        {
+            IMap target;
+            // TODO: A better way to check if a map exists
+            try
+            {
+                target = Server.Maps[map];
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+
+            Map.Leave(this, animation);
+            
+            MapId = map;
+            X = x;
+            Y = y;
+            Map.Enter(this, animation);
+        }
 
 		public abstract Packet AddToViewBuilder(WarpAnimation animation = WarpAnimation.None);
 		public abstract Packet DeleteFromViewBuilder(WarpAnimation animation = WarpAnimation.None);
