@@ -73,16 +73,23 @@ namespace EOHax.Programs.EOSERV
 			{
 				while (Connected)
 				{
-					HandlePacket(ReadPacket(), false);
+					try
+					{
+						HandlePacket(ReadPacket(), false);
+					}
+					catch (NotSupportedException ex)
+					{
+						Program.Logger.LogWarning(ex.Message);
+					}
 				}
 			}
 			catch (Exception ex)
 			{
-                if (!typeof(IOException).IsInstanceOfType(ex)) // Workaround for a "read returned 0 bytes" bug
-                {
-                    HelloHax0r();
-                    Program.Logger.LogError("Client triggered an exception and was killed", ex);
-                }
+				if (!typeof(IOException).IsInstanceOfType(ex)) // Workaround for a "read returned 0 bytes" bug
+				{
+					HelloHax0r();
+					Program.Logger.LogError("Client triggered an exception and was killed", ex);
+				}
 			}
 			finally
 			{
@@ -171,26 +178,26 @@ namespace EOHax.Programs.EOSERV
 				throw new InvalidOperationException("Client has already entered the game");
 
 			State = ClientState.Playing;
-            Server.Characters.Add(Character);
+			Server.Characters.Add(Character);
 		}
 
-        public void HelloHax0r()
-        {
-            Packet packet = new Packet(PacketFamily.StatSkill, PacketAction.Player);
-            for (int i = 0; i < 32; ++i)
-            {
-                packet.AddChar(0xFF);
-            }
-            Send(packet);
-        }
+		public void HelloHax0r()
+		{
+			Packet packet = new Packet(PacketFamily.StatSkill, PacketAction.Player);
+			for (int i = 0; i < 32; ++i)
+			{
+				packet.AddChar(0xFF);
+			}
+			Send(packet);
+		}
 
 		public void Dispose()
 		{
 			if (Character != null && Character.Map != null)
 				Character.Map.Leave(Character, WarpAnimation.None);
 
-            if (Character != null)
-                Character.Store();
+			if (Character != null)
+				Character.Store();
 
 			if (client.Connected)
 				stream.Dispose();

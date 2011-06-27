@@ -27,7 +27,7 @@ namespace EOHax.Programs.EOSERV.Handlers
 
 			// TODO: AccountExists functions
 			var account = from Account a in client.Server.Database.Container
-			              where a.username == username
+						  where a.username == username
 						  select 1;
 
 			if (account.Count() != 0)
@@ -70,8 +70,8 @@ namespace EOHax.Programs.EOSERV.Handlers
 			
 			// TODO: AccountExists functions
 			var checkAccount = from Account a in client.Server.Database.Container
-			                   where a.username == username
-			                   select 1;
+							   where a.username == username
+							   select 1;
 
 			if (checkAccount.Count() != 0)
 			{

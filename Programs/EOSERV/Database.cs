@@ -45,10 +45,10 @@ namespace EOHax.Programs.EOSERV
 			Container.Commit();
 		}
 
-        public void Delete(Object obj)
-        {
-            Container.Delete(obj);
-        }
+		public void Delete(Object obj)
+		{
+			Container.Delete(obj);
+		}
 	}
 
 	/*public class Guild
@@ -84,53 +84,53 @@ namespace EOHax.Programs.EOSERV
 		private bool legal;
 	}*/
 
-    public class Item : DatabaseObject
+	public class Item : DatabaseObject
 	{
 		public short id;
 
 		[Transient] private EIF.Entry data;
 
-        public short Id
-        {
-            get { return id; }
-            private set { id = value; }
-        }
+		public short Id
+		{
+			get { return id; }
+			private set { id = value; }
+		}
 
-        public EIF.Entry Data
-        {
-            get { return data; }
-        }
+		public EIF.Entry Data
+		{
+			get { return data; }
+		}
 
-        public Item(IServer server, short id): base(server)
-        {
-            this.id = id;
-            data = Server.ItemData[(ushort)(id - 1)];
-        }
+		public Item(IServer server, short id): base(server)
+		{
+			this.id = id;
+			data = Server.ItemData[(ushort)(id - 1)];
+		}
 
-        public new void Activate(IServer server)
-        {
-            base.Activate(server);
+		public new void Activate(IServer server)
+		{
+			base.Activate(server);
 
-            data = Server.ItemData[(ushort)(id - 1)];
-        }
-    }
+			data = Server.ItemData[(ushort)(id - 1)];
+		}
+	}
 
-    public class ItemStack : Item
-    {
-        public int amount;
+	public class ItemStack : Item
+	{
+		public int amount;
 
-        public int Amount
-        {
-            get { return amount; }
-            set { amount = value; }
-        }
+		public int Amount
+		{
+			get { return amount; }
+			set { amount = value; }
+		}
 
-        public ItemStack(IServer server, short id, int amount)
-            : base(server, id)
-        {
-            Amount = amount;
-        }
-    }
+		public ItemStack(IServer server, short id, int amount)
+			: base(server, id)
+		{
+			Amount = amount;
+		}
+	}
 
 	/*public class BankAccount
 	{

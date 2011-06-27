@@ -6,13 +6,13 @@ using EOHax.EOSERV.Data;
 
 namespace EOHax.Programs.EOSERV
 {
-    [Serializable]
+	[Serializable]
 	public abstract class MapObject : DatabaseObject, IMapObject
 	{
 		// These have to be public to allow queries to work
-		public ushort mapId;
-		public byte x;
-		public byte y;
+		public ushort    mapId;
+		public byte      x;
+		public byte      y;
 		public Direction direction = Direction.Down;
 		public short     hp;
 		public short     tp;
@@ -116,11 +116,11 @@ namespace EOHax.Programs.EOSERV
 			get { return Server.Maps[mapId]; }
 		}
 
-        public ushort Id
-        {
-            get { return Client.Id; }
-            protected set { Client.SetId(value); }
-        }
+		public ushort Id
+		{
+			get { return Client.Id; }
+			protected set { Client.SetId(value); }
+		}
 
 		private void Init()
 		{
@@ -135,7 +135,7 @@ namespace EOHax.Programs.EOSERV
 			Init();
 		}
 #region Database
-        public new void Activate(IServer server)
+		public new void Activate(IServer server)
 		{
 			base.Activate(server);
 
@@ -147,7 +147,7 @@ namespace EOHax.Programs.EOSERV
 			base.Store();
 		}
 #endregion
-        public IEnumerable<T> GetInRange<T>(int distance = -1)
+		public IEnumerable<T> GetInRange<T>(int distance = -1)
 			where T : IMapObject
 		{
 			return Map.ObjectsInRange<T>(X, Y, distance);
@@ -204,7 +204,8 @@ namespace EOHax.Programs.EOSERV
 
 			switch (direction)
 			{
-				case Direction.Up:    offsetY -= 1; break;
+				case Direction.Up:    
+					offsetY -= 1; break;
 				case Direction.Right: offsetX += 1; break;
 				case Direction.Down:  offsetY += 1; break;
 				case Direction.Left:  offsetX -= 1; break;
@@ -215,42 +216,42 @@ namespace EOHax.Programs.EOSERV
 			
 			if (Walkable(targetX, targetY))
 			{
-                if (Map.Data.Tiles[targetY, targetX].warp != null)
-                {
-                    Warp(Map.Data.Tiles[targetY, targetX].warp.Value.mapId,
-                         Map.Data.Tiles[targetY, targetX].warp.Value.x, Map.Data.Tiles[targetY, targetX].warp.Value.y);
-                    return false;
-                }
+				if (Map.Data.Tiles[targetY, targetX].warp != null)
+				{
+					Warp(Map.Data.Tiles[targetY, targetX].warp.Value.mapId,
+						 Map.Data.Tiles[targetY, targetX].warp.Value.x, Map.Data.Tiles[targetY, targetX].warp.Value.y);
+					return false;
+				}
 				X = targetX;
 				Y = targetY;
 				Direction = direction;
 
-                return true;
+				return true;
 			}
 
 			return false;
 		}
 
-        public virtual void Warp(ushort map, byte x, byte y, WarpAnimation animation = WarpAnimation.None)
-        {
-            IMap target;
-            // TODO: A better way to check if a map exists
-            try
-            {
-                target = Server.Maps[map];
-            }
-            catch (Exception ex)
-            {
-                return;
-            }
+		public virtual void Warp(ushort map, byte x, byte y, WarpAnimation animation = WarpAnimation.None)
+		{
+			IMap target;
+			// TODO: A better way to check if a map exists
+			try
+			{
+				target = Server.Maps[map];
+			}
+			catch (Exception ex)
+			{
+				return;
+			}
 
-            Map.Leave(this, animation);
-            
-            MapId = map;
-            X = x;
-            Y = y;
-            Map.Enter(this, animation);
-        }
+			Map.Leave(this, animation);
+			
+			MapId = map;
+			X = x;
+			Y = y;
+			Map.Enter(this, animation);
+		}
 
 		public abstract Packet AddToViewBuilder(WarpAnimation animation = WarpAnimation.None);
 		public abstract Packet DeleteFromViewBuilder(WarpAnimation animation = WarpAnimation.None);

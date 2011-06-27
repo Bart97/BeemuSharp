@@ -59,8 +59,8 @@ namespace EOHax.Programs.EOSERV.Handlers
 
 			// TODO: Make a CharacterExists function
 			var checkCharacter = from Character c in client.Server.Database.Container
-			                     where c.name == name
-			                     select 1;
+								 where c.name == name
+								 select 1;
 
 			if (checkCharacter.Count() != 0)
 			{
@@ -91,77 +91,77 @@ namespace EOHax.Programs.EOSERV.Handlers
 				reply.AddChar(character.HairStyle);
 				reply.AddChar(character.HairColor);
 				reply.AddChar((byte)character.Skin);
-                reply.AddChar(4); // Admin level
-                reply.AddShort((short)(character.Boots  != null ? character.Boots.Data.special1  : 0));
-                reply.AddShort((short)(character.Armor  != null ? character.Armor.Data.special1  : 0));
-                reply.AddShort((short)(character.Hat    != null ? character.Hat.Data.special1    : 0));
-                reply.AddShort((short)(character.Shield != null ? character.Shield.Data.special1 : 0));
-                reply.AddShort((short)(character.Weapon != null ? character.Weapon.Data.special1 : 0));
+				reply.AddChar(4); // Admin level
+				reply.AddShort((short)(character.Boots  != null ? character.Boots.Data.special1  : 0));
+				reply.AddShort((short)(character.Armor  != null ? character.Armor.Data.special1  : 0));
+				reply.AddShort((short)(character.Hat    != null ? character.Hat.Data.special1    : 0));
+				reply.AddShort((short)(character.Shield != null ? character.Shield.Data.special1 : 0));
+				reply.AddShort((short)(character.Weapon != null ? character.Weapon.Data.special1 : 0));
 				reply.AddBreak();
 			}
 
 			client.Send(reply);
 		}
 
-        // Delete a character
-        [HandlerState(ClientState.LoggedIn)]
-        public static void HandleRemove(Packet packet, IClient client, bool fromQueue)
-        {
-            /*short deleteId = */packet.GetShort();
-            int id = packet.GetShort();
+		// Delete a character
+		[HandlerState(ClientState.LoggedIn)]
+		public static void HandleRemove(Packet packet, IClient client, bool fromQueue)
+		{
+			/*short deleteId = */packet.GetShort();
+			int id = packet.GetShort();
 
-            if (id < 0 || id > client.Account.Characters.Count)
-                throw new ArgumentOutOfRangeException("Login character ID out of range");
+			if (id < 0 || id > client.Account.Characters.Count)
+				throw new ArgumentOutOfRangeException("Login character ID out of range");
 
-            Character deleteMe = client.Account.Characters[id];
-            client.Account.Characters.Remove(deleteMe);
-            deleteMe.Delete();
-            client.Account.Store();
-            client.Server.Database.Commit();
+			Character deleteMe = client.Account.Characters[id];
+			client.Account.Characters.Remove(deleteMe);
+			deleteMe.Delete();
+			client.Account.Store();
+			client.Server.Database.Commit();
 
-            Packet reply = new Packet(PacketFamily.Character, PacketAction.Reply);
-            reply.AddShort((short)CharacterReply.Deleted);
-            reply.AddChar((byte)client.Account.Characters.Count);
-            reply.AddByte(1); // TODO: What is this?
-            reply.AddBreak();
+			Packet reply = new Packet(PacketFamily.Character, PacketAction.Reply);
+			reply.AddShort((short)CharacterReply.Deleted);
+			reply.AddChar((byte)client.Account.Characters.Count);
+			reply.AddByte(1); // TODO: What is this?
+			reply.AddBreak();
 
-            // TODO: Some kind of character list packet builder
-            int i = 0;
-            foreach (Character character in client.Account.Characters)
-            {
-                reply.AddBreakString(character.Name);
-                reply.AddInt(i++);
-                reply.AddChar(character.Level);
-                reply.AddChar((byte)character.Gender);
-                reply.AddChar(character.HairStyle);
-                reply.AddChar(character.HairColor);
-                reply.AddChar((byte)character.Skin);
-                reply.AddChar(4); // Admin Level
-                reply.AddShort((short)(character.Boots  != null ? character.Boots.Data.special1 : 0));
-                reply.AddShort((short)(character.Armor  != null ? character.Armor.Data.special1 : 0));
-                reply.AddShort((short)(character.Hat    != null ? character.Hat.Data.special1 : 0));
-                reply.AddShort((short)(character.Shield != null ? character.Shield.Data.special1 : 0));
-                reply.AddShort((short)(character.Weapon != null ? character.Weapon.Data.special1 : 0));
-                reply.AddBreak();
-            }
+			// TODO: Some kind of character list packet builder
+			int i = 0;
+			foreach (Character character in client.Account.Characters)
+			{
+				reply.AddBreakString(character.Name);
+				reply.AddInt(i++);
+				reply.AddChar(character.Level);
+				reply.AddChar((byte)character.Gender);
+				reply.AddChar(character.HairStyle);
+				reply.AddChar(character.HairColor);
+				reply.AddChar((byte)character.Skin);
+				reply.AddChar(4); // Admin Level
+				reply.AddShort((short)(character.Boots  != null ? character.Boots.Data.special1  : 0));
+				reply.AddShort((short)(character.Armor  != null ? character.Armor.Data.special1  : 0));
+				reply.AddShort((short)(character.Hat    != null ? character.Hat.Data.special1    : 0));
+				reply.AddShort((short)(character.Shield != null ? character.Shield.Data.special1 : 0));
+				reply.AddShort((short)(character.Weapon != null ? character.Weapon.Data.special1 : 0));
+				reply.AddBreak();
+			}
 
-            client.Send(reply);
-        }
+			client.Send(reply);
+		}
 
-        // Request a character deletion
-        [HandlerState(ClientState.LoggedIn)]
-        public static void HandleTake(Packet packet, IClient client, bool fromQueue)
-        {
-            int id = packet.GetInt();
+		// Request a character deletion
+		[HandlerState(ClientState.LoggedIn)]
+		public static void HandleTake(Packet packet, IClient client, bool fromQueue)
+		{
+			int id = packet.GetInt();
 
-            if (id < 0 || id > client.Account.Characters.Count)
-                throw new ArgumentOutOfRangeException("Login character ID out of range");
+			if (id < 0 || id > client.Account.Characters.Count)
+				throw new ArgumentOutOfRangeException("Login character ID out of range");
 
-            Packet reply = new Packet(PacketFamily.Character, PacketAction.Player);
-            reply.AddShort(1000); // Delete id // TODO: Generate a deletion id and check it
-            reply.AddInt(id);
+			Packet reply = new Packet(PacketFamily.Character, PacketAction.Player);
+			reply.AddShort(1000); // Delete id // TODO: Generate a deletion id and check it
+			reply.AddInt(id);
 
-            client.Send(reply);
-        }
+			client.Send(reply);
+		}
 	}
 }

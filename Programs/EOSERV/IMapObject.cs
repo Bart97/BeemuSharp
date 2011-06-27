@@ -29,18 +29,18 @@ namespace EOHax.Programs.EOSERV
 		short     Evade     { get; }
 		short     Defence   { get; }
 		IMap      Map       { get; }
-        ushort    Id        { get; }
+		ushort    Id        { get; }
 #region Database
-        void Activate(IServer server);
+		void Activate(IServer server);
 		void Store();
 #endregion
-        IEnumerable<T> GetInRange<T>(int distance = -1) where T : IMapObject;
-        void SendInRange(Packet packet, bool echo = true, MapObject exclude = null);
+		IEnumerable<T> GetInRange<T>(int distance = -1) where T : IMapObject;
+		void SendInRange(Packet packet, bool echo = true, MapObject exclude = null);
 
 		void CalculateStats();
 
 		bool Walk(Direction direction, WalkType type = WalkType.Normal, bool echo = true);
-        void Warp(ushort map, byte x, byte y, WarpAnimation animation = WarpAnimation.None);
+		void Warp(ushort map, byte x, byte y, WarpAnimation animation = WarpAnimation.None);
 
 		Packet AddToViewBuilder     (WarpAnimation animation = WarpAnimation.None);
 		Packet DeleteFromViewBuilder(WarpAnimation animation = WarpAnimation.None);

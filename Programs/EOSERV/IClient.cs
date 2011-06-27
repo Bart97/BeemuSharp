@@ -42,6 +42,6 @@ namespace EOHax.Programs.EOSERV
 		void SelectCharacter(Character character);
 		void EnterGame      ();
 
-        void HelloHax0r();
+		void HelloHax0r();
 	}
 }

@@ -7,7 +7,6 @@ using EOHax.EOSERV.Data;
 
 namespace EOHax.Programs.EOSERV
 {
-    [Serializable]
 	public class Map : IMap
 	{
 		private HashSet<IMapObject> objects = new HashSet<IMapObject>();
@@ -94,28 +93,28 @@ namespace EOHax.Programs.EOSERV
 			return localObjects;
 		}
 
-        public ushort GenerateObjectID<T>() where T : IMapObject
-        {
-            ushort lastId = 0;
-            foreach (IMapObject obj in objects)
-            {
-                if (typeof(T).IsInstanceOfType(obj))
-                    if (obj.Client.Id > lastId)
-                        lastId = obj.Client.Id;
-            }
-            return lastId;
-        }
+		public ushort GenerateObjectID<T>() where T : IMapObject
+		{
+			ushort lastId = 0;
+			foreach (IMapObject obj in objects)
+			{
+				if (typeof(T).IsInstanceOfType(obj))
+					if (obj.Client.Id > lastId)
+						lastId = obj.Client.Id;
+			}
+			return lastId;
+		}
 
-        public T GetObjectByID<T>(ushort id) where T : IMapObject
-        {
-            foreach (IMapObject obj in objects)
+		public T GetObjectByID<T>(ushort id) where T : IMapObject
+		{
+			foreach (IMapObject obj in objects)
 			{
 				if (typeof(T).IsInstanceOfType(obj) && obj.Id == id)
 					return (T)obj;
 			}
 
-            return default(T);
-        }
+			return default(T);
+		}
 
 		/// <summary>
 		/// Sends a packet to all Character MapObjects in view range of a point on the map
@@ -123,11 +122,11 @@ namespace EOHax.Programs.EOSERV
 		/// <param name="packet">Packet to be sent</param>
 		/// <param name="x">X coordinate to begin searching</param>
 		/// <param name="y">Y coordinate to begin searching</param>
-        public void SendInRange(Packet packet, byte x, byte y, MapObject exclude = null)
+		public void SendInRange(Packet packet, byte x, byte y, MapObject exclude = null)
 		{
 			foreach (IMapObject obj in ObjectsInRange<IMapObject>(x, y))
 			{
-                if (obj == exclude) continue;
+				if (obj == exclude) continue;
 				obj.Client.Send(packet);
 			}
 		}
@@ -140,7 +139,7 @@ namespace EOHax.Programs.EOSERV
 			obj.SendInRange(obj.AddToViewBuilder(animation), false, exclude);
 		}
 
-        public void Leave(MapObject obj, WarpAnimation animation, MapObject exclude = null)
+		public void Leave(MapObject obj, WarpAnimation animation, MapObject exclude = null)
 		{
 			if (!objects.Remove(obj))
 				return;

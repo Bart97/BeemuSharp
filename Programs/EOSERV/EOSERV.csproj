@@ -91,11 +91,13 @@
     <Compile Include="Database.cs" />
     <Compile Include="DatabaseObject.cs" />
     <Compile Include="Handlers\Account.cs" />
+    <Compile Include="Handlers\Chair.cs" />
     <Compile Include="Handlers\Emote.cs" />
     <Compile Include="Handlers\Face.cs" />
     <Compile Include="Handlers\Item.cs" />
     <Compile Include="Handlers\PaperDoll.cs" />
     <Compile Include="Handlers\Players.cs" />
+    <Compile Include="Handlers\Sit.cs" />
     <Compile Include="Handlers\Talk.cs" />
     <Compile Include="Handlers\Warp.cs" />
     <Compile Include="IClient.cs" />

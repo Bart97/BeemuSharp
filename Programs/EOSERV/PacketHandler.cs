@@ -67,7 +67,7 @@ namespace EOHax.Programs.EOSERV
 			Handler handler = handlers[(byte)packet.Family, (byte)packet.Action];
 
 			if (handler == null)
-				throw new Exception("No handler set for " + packet.Family + "_" + packet.Action);
+				throw new NotSupportedException("No handler set for " + packet.Family + "_" + packet.Action);
 
 			bool allowed = true;
 			var stateAttributes = handler.GetInvocationList()[0].Method.GetCustomAttributes(typeof(HandlerStateAttribute), false);

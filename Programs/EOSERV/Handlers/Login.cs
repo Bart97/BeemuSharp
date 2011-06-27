@@ -15,8 +15,8 @@ namespace EOHax.Programs.EOSERV.Handlers
 			string password = packet.GetBreakString();
 			
 			var accounts = from Account a in client.Server.Database.Container
-			               where a.username == username
-			               select a;
+						   where a.username == username
+						   select a;
 
 			Packet reply = new Packet(PacketFamily.Login, PacketAction.Reply);
 
@@ -61,11 +61,11 @@ namespace EOHax.Programs.EOSERV.Handlers
 				reply.AddChar((byte)character.HairColor);
 				reply.AddChar((byte)character.Skin);
 				reply.AddChar(4); // Admin Level
-                reply.AddShort((short)(character.Boots  != null ? character.Boots.Data.special1  : 0));
-                reply.AddShort((short)(character.Armor  != null ? character.Armor.Data.special1  : 0));
-                reply.AddShort((short)(character.Hat    != null ? character.Hat.Data.special1    : 0));
-                reply.AddShort((short)(character.Shield != null ? character.Shield.Data.special1 : 0));
-                reply.AddShort((short)(character.Weapon != null ? character.Weapon.Data.special1 : 0));
+				reply.AddShort((short)(character.Boots  != null ? character.Boots.Data.special1  : 0));
+				reply.AddShort((short)(character.Armor  != null ? character.Armor.Data.special1  : 0));
+				reply.AddShort((short)(character.Hat    != null ? character.Hat.Data.special1    : 0));
+				reply.AddShort((short)(character.Shield != null ? character.Shield.Data.special1 : 0));
+				reply.AddShort((short)(character.Weapon != null ? character.Weapon.Data.special1 : 0));
 				reply.AddBreak();
 			}
 			

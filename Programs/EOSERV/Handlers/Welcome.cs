@@ -117,18 +117,18 @@ namespace EOHax.Programs.EOSERV.Handlers
 			reply.AddChar(client.Character.MaxWeight); // Max Weight
 			
 			// Inventory
-            foreach (ItemStack item in client.Character.Items)
-            {
-                reply.AddShort(item.Id);
-                reply.AddInt(item.Amount);
-            }
+			foreach (ItemStack item in client.Character.Items)
+			{
+				reply.AddShort(item.Id);
+				reply.AddInt(item.Amount);
+			}
 			reply.AddBreak();
 
 			// Spells
 			reply.AddBreak();
 
 			IEnumerable<Character> characters = client.Character.GetInRange<Character>();
-            IEnumerable<MapItem> items = client.Character.GetInRange<MapItem>();
+			IEnumerable<MapItem> items = client.Character.GetInRange<MapItem>();
 			
 			reply.AddChar((byte)characters.Count());
 			reply.AddBreak();
@@ -146,10 +146,10 @@ namespace EOHax.Programs.EOSERV.Handlers
 			reply.AddBreak();
 
 			// Items
-            foreach (MapItem item in items)
-            {
-                item.InfoBuilder(ref reply);
-            }
+			foreach (MapItem item in items)
+			{
+				item.InfoBuilder(ref reply);
+			}
 
 			client.Send(reply);
 		}
@@ -171,22 +171,22 @@ namespace EOHax.Programs.EOSERV.Handlers
 					break;
 
 				case FileType.Item:
-                    fileName = "./data/dat001.eif";
+					fileName = "./data/dat001.eif";
 					replyCode = InitReply.FileEIF;
 					break;
 
 				case FileType.NPC:
-                    fileName = "./data/dtn001.enf";
+					fileName = "./data/dtn001.enf";
 					replyCode = InitReply.FileENF;
 					break;
 
 				case FileType.Spell:
-                    fileName = "./data/dsl001.esf";
+					fileName = "./data/dsl001.esf";
 					replyCode = InitReply.FileESF;
 					break;
 
 				case FileType.Class:
-                    fileName = "./data/dat001.ecf";
+					fileName = "./data/dat001.ecf";
 					replyCode = InitReply.FileECF;
 					break;
 

@@ -18,7 +18,7 @@ namespace EOHax.Programs.EOSERV
 		private Thread thread;
 		private Dictionary<ushort, IClient> clients;
 		private Dictionary<ushort, IMap> maps;
-        private List<Character> characters;
+		private List<Character> characters;
 
 		public EIF ItemData { get; private set; }
 		public ENF NpcData { get; private set; }
@@ -39,10 +39,10 @@ namespace EOHax.Programs.EOSERV
 			get { return maps; }
 		}
 
-        public List<Character> Characters
-        {
-            get { return characters; }
-        }
+		public List<Character> Characters
+		{
+			get { return characters; }
+		}
 
 		private ushort GenerateClientID()
 		{
@@ -65,28 +65,28 @@ namespace EOHax.Programs.EOSERV
 
 		public Server(IPAddress addr, ushort port)
 		{
-            if (Program.Taskbar != null)
-                Program.Taskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
+			if (Program.Taskbar != null)
+				Program.Taskbar.SetProgressState(TaskbarProgressBarState.Indeterminate);
 			ScriptHost = ScriptHost.Create();
 
 			socket = new TcpListener(addr, port);
-            Program.Logger.LogInfo(String.Format("Listening on {0}:{1}", addr, port));
+			Program.Logger.LogInfo(String.Format("Listening on {0}:{1}", addr, port));
 			thread = new Thread(AcceptClients);
 			Database = new Database("eoserv.db4o");
 			clients = new Dictionary<ushort, IClient>();
 			maps = new Dictionary<ushort, IMap>();
-            characters = new List<Character>();
+			characters = new List<Character>();
 
-            ItemData = new EIF("./data/dat001.eif");
-            Program.Logger.LogSuccess(String.Format("Loaded {0} items", ItemData.Count));
-            NpcData = new ENF("./data/dtn001.enf");
-            Program.Logger.LogSuccess(String.Format("Loaded {0} NPCs", NpcData.Count));
-            ClassData = new ECF("./data/dat001.ecf");
-            Program.Logger.LogSuccess(String.Format("Loaded {0} classes", ClassData.Count));
-            SpellData = new ESF("./data/dsl001.esf");
-            Program.Logger.LogSuccess(String.Format("Loaded {0} spells", SpellData.Count));
+			ItemData = new EIF("./data/dat001.eif");
+			Program.Logger.LogSuccess(String.Format("Loaded {0} items", ItemData.Count));
+			NpcData = new ENF("./data/dtn001.enf");
+			Program.Logger.LogSuccess(String.Format("Loaded {0} NPCs", NpcData.Count));
+			ClassData = new ECF("./data/dat001.ecf");
+			Program.Logger.LogSuccess(String.Format("Loaded {0} classes", ClassData.Count));
+			SpellData = new ESF("./data/dsl001.esf");
+			Program.Logger.LogSuccess(String.Format("Loaded {0} spells", SpellData.Count));
 			MapData = new MapDataSet("./data/maps/");
-            Program.Logger.LogSuccess(String.Format("Loaded {0} maps", MapData.Count));
+			Program.Logger.LogSuccess(String.Format("Loaded {0} maps", MapData.Count));
 
 			/*ItemData.GetPubFile("./tmp/");
 			NpcData.GetPubFile("./tmp/");
@@ -98,9 +98,9 @@ namespace EOHax.Programs.EOSERV
 				entry.Value.GetPubFile("./tmp/");
 				maps.Add(entry.Key, new Map(entry.Value));
 			}
-            if (Program.Taskbar != null)
-                Program.Taskbar.SetProgressState(TaskbarProgressBarState.NoProgress);
-            Program.Logger.LogSuccess("Server started");
+			if (Program.Taskbar != null)
+				Program.Taskbar.SetProgressState(TaskbarProgressBarState.NoProgress);
+			Program.Logger.LogSuccess("Server started");
 		}
 
 		public void Start()
@@ -143,11 +143,11 @@ namespace EOHax.Programs.EOSERV
 				{
 					logString += " " + client.Account.Username;
 
-                    if (client.Character != null)
-                    {
-                        Characters.Remove(client.Character);
-                        logString += "/" + client.Character.Name;
-                    }
+					if (client.Character != null)
+					{
+						Characters.Remove(client.Character);
+						logString += "/" + client.Character.Name;
+					}
 				}
 
 				Program.Logger.LogInfo(logString);
@@ -169,7 +169,13 @@ namespace EOHax.Programs.EOSERV
 
 		public void Shutdown(int time)
 		{
-			throw new NotImplementedException();
+			/*throw new NotImplementedException();*/
+			Program.Logger.LogInfo("Server shutting down");
+			foreach (Character character in characters)
+			{
+				character.Store();
+			}
+			Database.Commit();
 		}
 	}
 }
