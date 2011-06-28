@@ -12,5 +12,11 @@ namespace EOHax.Programs.EOSERV.Handlers
 		{
 			
 		}
+
+		// Ping reply
+		public static void HandlePing(Packet packet, IClient client, bool fromQueue)
+		{
+			client.Pinged = false;
+		}
 	}
 }

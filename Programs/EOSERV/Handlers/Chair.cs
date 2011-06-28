@@ -20,6 +20,9 @@ namespace EOHax.Programs.EOSERV.Handlers
 				byte x = packet.GetChar();
 				byte y = packet.GetChar();
 
+				if ((x + y - client.Character.X - client.Character.Y) > 1)
+					throw new Exception("Incorrect chair coordinates.");
+
 				switch (client.Character.Map.Data.Tiles[y, x].spec)
 				{
 					case MapTileSpec.ChairDown:
@@ -29,7 +32,7 @@ namespace EOHax.Programs.EOSERV.Handlers
 						}
 						else
 						{
-							throw new Exception("Incorrect coordinates.");
+							throw new Exception("Incorrect chair coordinates.");
 						}
 						break;
 
@@ -40,7 +43,7 @@ namespace EOHax.Programs.EOSERV.Handlers
 							}
 							else
 							{
-								throw new Exception("Incorrect coordinates.");
+								throw new Exception("Incorrect chair coordinates.");
 							}
 							break;
 
@@ -51,7 +54,7 @@ namespace EOHax.Programs.EOSERV.Handlers
 							}
 							else
 							{
-								throw new Exception("Incorrect coordinates.");
+								throw new Exception("Incorrect chair coordinates.");
 							}
 							break;
 
@@ -62,7 +65,7 @@ namespace EOHax.Programs.EOSERV.Handlers
 							}
 							else
 							{
-								throw new Exception("Incorrect coordinates.");
+								throw new Exception("Incorrect chair coordinates.");
 							}
 							break;
 
@@ -77,7 +80,7 @@ namespace EOHax.Programs.EOSERV.Handlers
 							}
 							else
 							{
-								throw new Exception("Incorrect coordinates.");
+								throw new Exception("Incorrect chair coordinates.");
 							}
 							break;
 
@@ -92,7 +95,7 @@ namespace EOHax.Programs.EOSERV.Handlers
 							}
 							else
 							{
-								throw new Exception("Incorrect coordinates.");
+								throw new Exception("Incorrect chair coordinates.");
 							}
 							break;
 
@@ -115,12 +118,12 @@ namespace EOHax.Programs.EOSERV.Handlers
 							}
 							else
 							{
-								throw new Exception("Incorrect coordinates.");
+								throw new Exception("Incorrect chair coordinates.");
 							}
 							break;
 
 						default:
-							throw new Exception("Incorrect coordinates.");
+							throw new Exception("Incorrect chair coordinates.");
 				}
 				
 				client.Character.SitChair(x, y);

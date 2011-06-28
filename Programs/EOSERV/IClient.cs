@@ -27,6 +27,7 @@ namespace EOHax.Programs.EOSERV
 		ClientState State     { get; }
 
 		bool      Connected { get; }
+		bool      Pinged    { get; set;  }
 		IPAddress Address   { get; }
 
 		void Start();

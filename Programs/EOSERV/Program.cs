@@ -18,6 +18,10 @@ namespace EOHax.Programs.EOSERV
 		public static void Main(string[] args)
 		{
 			Logger = new ConsoleLogger();
+#if DEBUG
+			Logger.LogLevel = LogLevel.Debug;
+#endif
+			Logger.LogDebug("Test");
 			try
 			{
 				Taskbar = TaskbarManager.Instance;
@@ -27,8 +31,7 @@ namespace EOHax.Programs.EOSERV
 				// Skip the taskbar stuff
 			}
 			Console.WriteLine(
-@"
-Thanks to: ____    ___    ___     ________    _   _      __   __     
+@"Thanks to: ____    ___    ___     ________    _   _      __   __     
 Apollo    /  _ \  / _ \  / _ \   /  _   _ \  / / / / ___/ /__/ /__  Based on
 Sausage  / /_/ / /  __/ /  __/  / / / / / / / \_/ / /__/ /__/ /__/  EOSERV#
         /  _ <   \___/  \___/  /_/ /_/ /_/  \__,_/ ___/ /__/ /__      by
@@ -37,6 +40,9 @@ Sausage  / /_/ / /  __/ /  __/  / / / / / / / \_/ / /__/ /__/ /__/  EOSERV#
 			// TODO: Make the "Basesd on EOSERV# by Sausage <tehsausage.com> look better. Probably move it to a new line.
 
 			Console.Title = String.Format("Beemu# version {0}", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+#if DEBUG
+			Console.Title += " debug";
+#endif
 
 			server = new Server(IPAddress.Any, 8078);
 			server.Start();

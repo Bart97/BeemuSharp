@@ -16,6 +16,7 @@ namespace EOHax.Programs.EOSERV
 		private Random rng = new Random();
 		private TcpListener socket;
 		private Thread thread;
+		private Timer pingTimer;
 		private Dictionary<ushort, IClient> clients;
 		private Dictionary<ushort, IMap> maps;
 		private List<Character> characters;
@@ -72,21 +73,24 @@ namespace EOHax.Programs.EOSERV
 			socket = new TcpListener(addr, port);
 			Program.Logger.LogInfo(String.Format("Listening on {0}:{1}", addr, port));
 			thread = new Thread(AcceptClients);
+			pingTimer = new Timer(new TimerCallback(this.PingClients), new AutoResetEvent(false), 60000, 60000);
+
 			Database = new Database("eoserv.db4o");
+			Program.Logger.LogSuccess("Database loaded.");
 			clients = new Dictionary<ushort, IClient>();
 			maps = new Dictionary<ushort, IMap>();
 			characters = new List<Character>();
 
 			ItemData = new EIF("./data/dat001.eif");
-			Program.Logger.LogSuccess(String.Format("Loaded {0} items", ItemData.Count));
+			Program.Logger.LogSuccess(String.Format("Loaded {0} items.", ItemData.Count));
 			NpcData = new ENF("./data/dtn001.enf");
-			Program.Logger.LogSuccess(String.Format("Loaded {0} NPCs", NpcData.Count));
+			Program.Logger.LogSuccess(String.Format("Loaded {0} NPCs.", NpcData.Count));
 			ClassData = new ECF("./data/dat001.ecf");
-			Program.Logger.LogSuccess(String.Format("Loaded {0} classes", ClassData.Count));
+			Program.Logger.LogSuccess(String.Format("Loaded {0} classes.", ClassData.Count));
 			SpellData = new ESF("./data/dsl001.esf");
-			Program.Logger.LogSuccess(String.Format("Loaded {0} spells", SpellData.Count));
+			Program.Logger.LogSuccess(String.Format("Loaded {0} spells.", SpellData.Count));
 			MapData = new MapDataSet("./data/maps/");
-			Program.Logger.LogSuccess(String.Format("Loaded {0} maps", MapData.Count));
+			Program.Logger.LogSuccess(String.Format("Loaded {0} maps.", MapData.Count));
 
 			/*ItemData.GetPubFile("./tmp/");
 			NpcData.GetPubFile("./tmp/");
@@ -98,6 +102,7 @@ namespace EOHax.Programs.EOSERV
 				entry.Value.GetPubFile("./tmp/");
 				maps.Add(entry.Key, new Map(entry.Value));
 			}
+
 			if (Program.Taskbar != null)
 				Program.Taskbar.SetProgressState(TaskbarProgressBarState.NoProgress);
 			Program.Logger.LogSuccess("Server started");
@@ -164,6 +169,31 @@ namespace EOHax.Programs.EOSERV
 				AddClient(new_client);
 				new_client.Start();
 				new_client = null;
+			}
+		}
+
+		private void PingClients(Object stateInfo)
+		{
+			Program.Logger.LogDebug("Pinging clients.");
+
+			Packet packet = new Packet(PacketFamily.Connection, PacketAction.Player);
+			packet.AddShort(0);
+			packet.AddChar(0);
+
+			foreach (KeyValuePair<ushort, IClient> client in clients)
+			{
+				if (client.Value.Pinged)
+				{
+					Program.Logger.LogError("Client ping timed out.");
+
+					RemoveClient(client.Value);
+				}
+				else
+				{
+					client.Value.Send(packet);
+
+					client.Value.Pinged = true;
+				}
 			}
 		}
 

@@ -194,7 +194,6 @@ namespace EOHax.EOSERV.Data
 						Door = (tile.door > 0),
 						Locked = (tile.door > 1)
 					};
-                    Console.WriteLine(String.Format("Warp leading to: m={0} x={1} y={2}", warp.mapId, warp.x, warp.y));
 					if (warp.Locked)
 						warp.Key = (ushort)(tile.door - 1);
 

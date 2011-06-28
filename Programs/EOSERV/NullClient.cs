@@ -17,6 +17,7 @@ namespace EOHax.Programs.EOSERV
 		public Character Character { get; private set; }
 		public int Version { get; private set; }
 		public ClientState State { get; private set; }
+		public bool Pinged { get; set; }
 
 		public bool Connected
 		{
