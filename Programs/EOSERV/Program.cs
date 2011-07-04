@@ -14,6 +14,7 @@ namespace EOHax.Programs.EOSERV
 		public static ILogger Logger { get; private set; }
 
 		public static TaskbarManager Taskbar { get; private set; }
+		private static HandlerRoutine handlerRoutine;
 
 		public static void Main(string[] args)
 		{
@@ -21,12 +22,11 @@ namespace EOHax.Programs.EOSERV
 #if DEBUG
 			Logger.LogLevel = LogLevel.Debug;
 #endif
-			Logger.LogDebug("Test");
 			try
 			{
 				Taskbar = TaskbarManager.Instance;
 			}
-			catch (PlatformNotSupportedException)
+			catch (Exception)
 			{
 				// Skip the taskbar stuff
 			}
@@ -44,10 +44,11 @@ Sausage  / /_/ / /  __/ /  __/  / / / / / / / \_/ / /__/ /__/ /__/  EOSERV#
 			Console.Title += " debug";
 #endif
 
-			server = new Server(IPAddress.Any, 8078);
+			server = new Server(IPAddress.Parse(Properties.Settings.Default.BindIp), Properties.Settings.Default.Port);
 			server.Start();
 
-			SetConsoleCtrlHandler(new HandlerRoutine(ConsoleClose), true);
+			handlerRoutine = new HandlerRoutine(ConsoleClose);
+			SetConsoleCtrlHandler(handlerRoutine, true);
 		}
 		private static bool ConsoleClose(CtrlTypes ctrlType) 
 		{

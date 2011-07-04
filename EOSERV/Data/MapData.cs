@@ -178,7 +178,14 @@ namespace EOHax.EOSERV.Data
 			{
 				foreach (EMF.Tile tile in row.tiles)
 				{
-					Tiles[row.y, tile.x].spec = ConvertTileSpec(tile.spec);
+					try
+					{
+						Tiles[row.y, tile.x].spec = ConvertTileSpec(tile.spec);
+					}
+					catch (IndexOutOfRangeException)
+					{
+
+					}
 				}
 			}
 
@@ -196,8 +203,14 @@ namespace EOHax.EOSERV.Data
 					};
 					if (warp.Locked)
 						warp.Key = (ushort)(tile.door - 1);
+					try
+					{
+						Tiles[row.y, tile.x].warp = warp;
+					}
+					catch (IndexOutOfRangeException)
+					{
 
-					Tiles[row.y, tile.x].warp = warp;
+					}
 				}
 			}
 		}
@@ -284,6 +297,11 @@ namespace EOHax.EOSERV.Data
         {
             get { return data.Count; }
         }
+
+		public bool Exists(ushort id)
+		{
+			return data.ContainsKey(id);
+		}
 
 		/// <summary>
 		/// Creates an empty data set

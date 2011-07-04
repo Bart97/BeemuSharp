@@ -41,7 +41,13 @@ namespace EOHax.Programs.EOSERV
 		public void Send(Packet packet) { }
 		public void HandlePacket(Packet packet, bool fromQueue) { }
 
-		public void SetId(ushort id) { }
+		public void SetId(ushort id)
+		{
+			if (Id != 0)
+				throw new InvalidOperationException("Id has already been set");
+
+			Id = id;
+		}
 		public void Init(int version) { }
 		public void Login(Account account) { }
 		public void SelectCharacter(Character character) { }

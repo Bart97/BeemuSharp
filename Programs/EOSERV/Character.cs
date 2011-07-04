@@ -354,10 +354,9 @@ namespace EOHax.Programs.EOSERV
 			Skin = skin;
 			Items = new List<ItemStack>();
 
-			// TODO: Get default from server
-			MapId = 1;
-			X = 10;
-			Y = 10;
+			MapId = Properties.Settings.Default.StartMap;
+			X = Properties.Settings.Default.StartX;
+			Y = Properties.Settings.Default.StartY;
 		}
 #region Database
 		public void Activate(IServer server, IClient client)
@@ -405,6 +404,13 @@ namespace EOHax.Programs.EOSERV
 				bracer1.Activate(server);
 			if (bracer2 != null)
 				bracer2.Activate(server);
+
+			if (!Server.MapData.Exists(MapId))
+			{
+				MapId = Properties.Settings.Default.StartMap;
+				X = Properties.Settings.Default.StartX;
+				Y = Properties.Settings.Default.StartY;
+			}
 		}
 
 		public new void Store()

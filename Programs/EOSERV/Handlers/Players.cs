@@ -20,7 +20,7 @@ namespace EOHax.Programs.EOSERV.Handlers
 			foreach (Character character in client.Server.Characters)
 			{
 				reply.AddBreakString(character.Name);
-				reply.AddBreakString(client.Character.Title ?? "");
+				reply.AddBreakString(character.Title ?? "");
 				reply.AddChar(0); // What's this?
 				reply.AddChar((byte)EO.PaperdollIcon.HGM);
 				reply.AddChar((byte)character.ClassId);

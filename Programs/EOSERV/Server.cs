@@ -17,6 +17,7 @@ namespace EOHax.Programs.EOSERV
 		private TcpListener socket;
 		private Thread thread;
 		private Timer pingTimer;
+		private SLNClient slnClient;
 		private Dictionary<ushort, IClient> clients;
 		private Dictionary<ushort, IMap> maps;
 		private List<Character> characters;
@@ -105,6 +106,9 @@ namespace EOHax.Programs.EOSERV
 
 			if (Program.Taskbar != null)
 				Program.Taskbar.SetProgressState(TaskbarProgressBarState.NoProgress);
+			
+			slnClient = new SLNClient();
+
 			Program.Logger.LogSuccess("Server started");
 		}
 
@@ -206,6 +210,7 @@ namespace EOHax.Programs.EOSERV
 				character.Store();
 			}
 			Database.Commit();
+			Stop();
 		}
 	}
 }

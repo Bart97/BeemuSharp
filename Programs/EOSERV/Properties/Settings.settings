@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="EOHax.Programs.EOSERV.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="Port" Type="System.UInt16" Scope="Application">
+      <Value Profile="(Default)">8078</Value>
+    </Setting>
+    <Setting Name="BindIp" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">0.0.0.0</Value>
+    </Setting>
+    <Setting Name="SLN_URL" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://eoserv.net/SLN/</Value>
+    </Setting>
+    <Setting Name="Name" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Beemu# server</Value>
+    </Setting>
+    <Setting Name="SLN_Time" Type="System.TimeSpan" Scope="Application">
+      <Value Profile="(Default)">00:05:00</Value>
+    </Setting>
+    <Setting Name="Host" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Site" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Zone" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">test</Value>
+    </Setting>
+    <Setting Name="StartMap" Type="System.UInt16" Scope="Application">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="StartX" Type="System.Byte" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="StartY" Type="System.Byte" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

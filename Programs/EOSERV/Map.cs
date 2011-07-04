@@ -99,8 +99,8 @@ namespace EOHax.Programs.EOSERV
 			foreach (IMapObject obj in objects)
 			{
 				if (typeof(T).IsInstanceOfType(obj))
-					if (obj.Client.Id > lastId)
-						lastId = obj.Client.Id;
+					if (obj.Id >= lastId)
+						lastId = (ushort)((short)obj.Id + 1);
 			}
 			return lastId;
 		}

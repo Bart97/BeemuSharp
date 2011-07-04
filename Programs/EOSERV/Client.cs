@@ -84,13 +84,11 @@ namespace EOHax.Programs.EOSERV
 					}
 				}
 			}
+			catch (IOException) { }
 			catch (Exception ex)
 			{
-				if (!typeof(IOException).IsInstanceOfType(ex)) // Workaround for a "read returned 0 bytes" bug
-				{
-					HelloHax0r();
-					Program.Logger.LogError("Client triggered an exception and was killed", ex);
-				}
+				HelloHax0r();
+				Program.Logger.LogError("Client triggered an exception and was killed", ex);
 			}
 			finally
 			{
