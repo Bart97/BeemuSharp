@@ -54,4 +54,9 @@ namespace EOHax.Programs.EOSERV
 	{
 		public MessageAnnounce(IMessageSource source, string message) : base(source, message) { } 
 	}
+
+	public class MessageServer : Message
+	{
+		public MessageServer(IMessageSource source, string message) : base(source, message) { }
+	}
 }

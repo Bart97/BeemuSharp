@@ -7,7 +7,7 @@ using EOHax.EOSERV.Data;
 
 namespace EOHax.Programs.EOSERV
 {
-	public class Map : IMap
+	public class Map : IMap, IMessageTarget
 	{
 		private HashSet<IMapObject> objects = new HashSet<IMapObject>();
 
@@ -150,6 +150,18 @@ namespace EOHax.Programs.EOSERV
 		public void ObjectBuilder(ref Packet packet)
 		{
 
+		}
+
+		public void RecieveMsg(IMessageSource source, Message message)
+		{
+			if (typeof(IMapObject).IsInstanceOfType(source))
+			{
+				Packet packet = new Packet(PacketFamily.Talk, PacketAction.Player);
+				packet.AddShort((short)((MapObject)source).Id);
+				packet.AddString(message.MessageString);
+
+				SendInRange(packet, ((MapObject)source).X, ((MapObject)source).Y, (MapObject)source);
+			}
 		}
 	}
 }

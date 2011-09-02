@@ -50,7 +50,7 @@ namespace EOHax.Programs.EOSERV.Handlers
 
 			reply.AddChar(0); // Class
 			reply.AddString("TAG"); // Guild tag
-			reply.AddChar((byte)AdminLevel.HGM);
+			reply.AddChar((byte)client.Character.Admin);
 
 			reply.AddChar(client.Character.Level); // Level
 			reply.AddInt(client.Character.Exp); // Exp

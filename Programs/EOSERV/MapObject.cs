@@ -239,7 +239,7 @@ namespace EOHax.Programs.EOSERV
 			{
 				target = Server.Maps[map];
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				return;
 			}

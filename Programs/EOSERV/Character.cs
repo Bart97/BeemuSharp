@@ -9,7 +9,7 @@ using EOHax.EO.Data;
 
 namespace EOHax.Programs.EOSERV
 {
-	public class Character : MapObject
+	public class Character : MapObject, IMessageSource, IMessageTarget, ICommandExecutor
 	{
 		// These have to be public to allow queries to work
 		public string     name;
@@ -37,6 +37,12 @@ namespace EOHax.Programs.EOSERV
 		public byte       maxWeight;
 		bool              warping;
 		WarpAnimation     warpAnimation = WarpAnimation.None;
+		private short     adjStrength;
+		private short     adjIntelligence;
+		private short     adjWisdom;
+		private short     adjAgility;
+		private short     adjConstruction;
+		private short     adjCharisma;
 
 		public List<ItemStack> items;
 		//public Citizenship citizenship = null;
@@ -74,7 +80,7 @@ namespace EOHax.Programs.EOSERV
 		public string Title
 		{
 			get { return title; }
-			private set { title = value; }
+			set { title = value; }
 		}
 
 		public short ClassId
@@ -98,7 +104,7 @@ namespace EOHax.Programs.EOSERV
 		public AdminLevel Admin
 		{
 			get { return admin; }
-			private set { admin = value; }
+			set { admin = value; }
 		}
 
 		public byte HairStyle
@@ -133,13 +139,13 @@ namespace EOHax.Programs.EOSERV
 
 		public short Strength
 		{
-			get { return strength; }
+			get { return (short)(strength + adjStrength); }
 			private set { strength = value; }
 		}
 
 		public short Intelligence
 		{
-			get { return intelligence; }
+			get { return (short)(intelligence + adjIntelligence); }
 			private set { intelligence = value; }
 		}
 
@@ -341,6 +347,11 @@ namespace EOHax.Programs.EOSERV
 		public ECF.Entry Class
 		{
 			get { return Server.ClassData[(ushort)classId]; }
+		}
+
+		public AccessLevel AccessLevel
+		{
+			get { return (AccessLevel)Admin; }
 		}
 
 		public Character(IServer server, IClient client, string name, Gender gender, byte hairStyle, byte hairColor, Skin skin) : base(server, client)
@@ -631,6 +642,21 @@ namespace EOHax.Programs.EOSERV
 			packet.AddChar(X);
 			packet.AddChar(Y);
 			SendInRange(packet, !chair);
+		}
+
+		public void SendMsg(IMessageTarget target, Message message)
+		{
+			target.RecieveMsg(this, message);
+		}
+
+		public void RecieveMsg(IMessageSource source, Message message)
+		{
+			if (typeof(MessageServer).IsInstanceOfType(source))
+			{
+				Packet packet = new Packet(PacketFamily.Talk, PacketAction.Server);
+				packet.AddString(message.MessageString);
+				Client.Send(packet);
+			}
 		}
 #region Paperdoll
 		public void Equip(short item, byte subloc)

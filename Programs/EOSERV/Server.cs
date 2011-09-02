@@ -18,6 +18,7 @@ namespace EOHax.Programs.EOSERV
 		private Thread thread;
 		private Timer pingTimer;
 		private SLNClient slnClient;
+		private ConsoleInput consoleInput;
 		private Dictionary<ushort, IClient> clients;
 		private Dictionary<ushort, IMap> maps;
 		private List<Character> characters;
@@ -30,6 +31,8 @@ namespace EOHax.Programs.EOSERV
 		public Database Database { get; private set; }
 
 		public ScriptHost ScriptHost { get; private set; }
+
+		public GlobalChat Global { get; private set; }
 
 		public IDictionary<ushort, IClient> Clients
 		{
@@ -78,6 +81,7 @@ namespace EOHax.Programs.EOSERV
 
 			Database = new Database("eoserv.db4o");
 			Program.Logger.LogSuccess("Database loaded.");
+			Global = new GlobalChat();
 			clients = new Dictionary<ushort, IClient>();
 			maps = new Dictionary<ushort, IMap>();
 			characters = new List<Character>();
@@ -108,6 +112,7 @@ namespace EOHax.Programs.EOSERV
 				Program.Taskbar.SetProgressState(TaskbarProgressBarState.NoProgress);
 			
 			slnClient = new SLNClient();
+			consoleInput = new ConsoleInput(this);
 
 			Program.Logger.LogSuccess("Server started");
 		}
@@ -211,6 +216,17 @@ namespace EOHax.Programs.EOSERV
 			}
 			Database.Commit();
 			Stop();
+		}
+
+		public void Send(Packet packet, ClientState state)
+		{
+			foreach (KeyValuePair<ushort, IClient> client in clients)
+			{
+				if (client.Value.State == state)
+				{
+					client.Value.Send(packet);
+				}
+			}
 		}
 	}
 }

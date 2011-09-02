@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using EOHax.EO;
 using EOHax.EO.Communication;
 using EOHax.Scripting;
@@ -13,12 +14,6 @@ namespace EOHax.Programs.EOSERV.Handlers
 		{
 			// TODO: Replace temporary talk code
 			string message = packet.GetEndString();
-
-			Packet talkPacket = new Packet(PacketFamily.Talk, PacketAction.Player);
-			talkPacket.AddShort((short)client.Id);
-			talkPacket.AddString(message);
-
-			Program.Logger.LogLevel = EOHax.Logging.LogLevel.Debug;
 
 			if (message[0] == '%')
 			{
@@ -51,12 +46,29 @@ namespace EOHax.Programs.EOSERV.Handlers
 					Program.Logger.LogError("Script execution failed", ex);
 				}
 			}
-			else if (message[0] == '$')
+			else if (message[0] == '$') // TODO: $ as command macro, = as eval
 			{
-				Program.Logger.LogDebug(String.Format("Adding item {0}", Convert.ToInt16(message.Substring(1))));
-				client.Character.AddItem(Convert.ToInt16(message.Substring(1)), 1);
+				try
+				{
+					CommandParser.Parse(message.Substring(1), client.Character);
+				}
+				catch (Exception ex)
+				{
+					Packet warning = new Packet(PacketFamily.Message, PacketAction.Open);
+					warning.AddString(String.Format("{0}: {1}", ex.GetType().Name, ex.Message));
+					client.Send(warning);
+				}
 			}
-			client.Character.SendInRange(talkPacket, false);
+
+			client.Character.SendMsg((IMessageTarget)client.Character.Map, new MessageLocal(client.Character, message));
+		}
+
+		// Player sending a global message
+		[HandlerState(ClientState.Playing)]
+		public static void HandleMessage(Packet packet, IClient client, bool fromQueue)
+		{
+			String message = packet.GetEndString();
+			client.Character.SendMsg((IMessageTarget)client.Server.Global, new MessageGlobal(client.Character, message));
 		}
 	}
 }

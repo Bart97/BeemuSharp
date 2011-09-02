@@ -60,7 +60,7 @@ namespace EOHax.Programs.EOSERV.Handlers
 				reply.AddChar((byte)character.HairStyle);
 				reply.AddChar((byte)character.HairColor);
 				reply.AddChar((byte)character.Skin);
-				reply.AddChar(4); // Admin Level
+				reply.AddChar((byte)character.Admin);
 				reply.AddShort((short)(character.Boots  != null ? character.Boots.Data.special1  : 0));
 				reply.AddShort((short)(character.Armor  != null ? character.Armor.Data.special1  : 0));
 				reply.AddShort((short)(character.Hat    != null ? character.Hat.Data.special1    : 0));

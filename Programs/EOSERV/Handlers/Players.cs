@@ -24,8 +24,8 @@ namespace EOHax.Programs.EOSERV.Handlers
 				reply.AddChar(0); // What's this?
 				reply.AddChar((byte)EO.PaperdollIcon.HGM);
 				reply.AddChar((byte)character.ClassId);
-				reply.AddBreakString("   ");
-
+				reply.AddString("TAG");
+				reply.AddBreak();
 			}
 			client.Send(reply);
 		}

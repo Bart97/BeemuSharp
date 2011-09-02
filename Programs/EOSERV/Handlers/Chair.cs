@@ -5,7 +5,7 @@ using EOHax.EOSERV.Data;
 
 namespace EOHax.Programs.EOSERV.Handlers
 {
-	class ChairHandler
+	static class ChairHandler
 	{
 		// Player sitting on a chair / standing
 		[HandlerState(ClientState.Playing)]

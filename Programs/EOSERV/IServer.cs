@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using EOHax.EO.Communication;
 using EOHax.EO.Data;
 using EOHax.EOSERV.Data;
 using EOHax.Scripting;
@@ -22,6 +22,8 @@ namespace EOHax.Programs.EOSERV
 		IDictionary<ushort, IMap>    Maps       { get; }
 		List<Character>              Characters { get; }
 
+		GlobalChat Global { get; }
+
 		void Start();
 		void Stop ();
 		void Join ();
@@ -30,5 +32,7 @@ namespace EOHax.Programs.EOSERV
 		void RemoveClient(IClient client);
 
 		void Shutdown(int time);
+
+		void Send(Packet packet, ClientState state);
 	}
 }
