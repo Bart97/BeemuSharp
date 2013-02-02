@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EOHax.EO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ namespace EOHax.Programs.EOSERV.Commands
 		{
 			if (parameters.Get<int>(0) > 0)
 			{
-				((Character)executor).Warp((ushort)parameters.Get<int>(1), (byte)parameters.Get<int>(2), (byte)parameters.Get<int>(3), EO.WarpAnimation.Admin);
+				((Character)executor).Warp((ushort)parameters.Get<int>(1), (byte)parameters.Get<int>(2), (byte)parameters.Get<int>(3), WarpAnimation.Admin);
 			}
 		}
 	}

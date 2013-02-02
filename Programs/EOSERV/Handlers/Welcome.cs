@@ -128,6 +128,7 @@ namespace EOHax.Programs.EOSERV.Handlers
 			reply.AddBreak();
 
 			IEnumerable<Character> characters = client.Character.GetInRange<Character>();
+            IEnumerable<NPC> npcs = client.Character.GetInRange<NPC>();
 			IEnumerable<MapItem> items = client.Character.GetInRange<MapItem>();
 			
 			reply.AddChar((byte)characters.Count());
@@ -143,6 +144,10 @@ namespace EOHax.Programs.EOSERV.Handlers
 			// }
 
 			// NPCs
+            foreach (NPC npc in npcs)
+            {
+                npc.InfoBuilder(ref reply);
+            }
 			reply.AddBreak();
 
 			// Items

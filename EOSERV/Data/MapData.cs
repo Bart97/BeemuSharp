@@ -55,6 +55,17 @@ namespace EOHax.EOSERV.Data
 		}
 	}
 
+	public struct MapNPC
+	{
+		public byte x;
+		public byte y;
+		public ushort id;
+
+		public byte spawnType;
+		public ushort spawnTime;
+		public byte amount;
+	}
+
 	public enum MapTileSpec
 	{
 		Wall = 0,
@@ -106,6 +117,7 @@ namespace EOHax.EOSERV.Data
 		{
 			public MapTileSpec? spec;
 			public MapWarp? warp;
+			public MapNPC? npc;
 		}
 
 		public Tile[,] Tiles { get; private set; }
@@ -211,6 +223,27 @@ namespace EOHax.EOSERV.Data
 					{
 
 					}
+				}
+			}
+
+			foreach (EMF.NPC npc in emf.npcs)
+			{
+				MapNPC newnpc = new MapNPC()
+				{
+					x = npc.x,
+					y = npc.y,
+					id = npc.id,
+					spawnType = npc.spawnType,
+					spawnTime = npc.spawnTime,
+					amount = npc.amount
+				};
+				try
+				{
+					Tiles[npc.y, npc.x].npc = newnpc;
+				}
+				catch (IndexOutOfRangeException)
+				{
+
 				}
 			}
 		}

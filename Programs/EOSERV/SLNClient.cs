@@ -20,7 +20,7 @@ namespace EOHax.Programs.EOSERV
 		private void CheckIn(Object stateInfo)
 		{
 			Program.Logger.LogInfo("SLN checkin");
-			String url = Properties.Settings.Default.SLN_URL + "check?software=Beemu%23";
+			String url = Properties.Settings.Default.SLN_URL + "check?software=Beemu&v=" + "1.0";
 			url += String.Format("&retry={0}", HttpUtility.UrlEncode(Convert.ToString((long)Properties.Settings.Default.SLN_Time.TotalSeconds)));
 			// TODO: host
 			if (!String.IsNullOrEmpty(Properties.Settings.Default.Host))

@@ -16,12 +16,14 @@ namespace EOHax.Programs.EOSERV
 		private Random rng = new Random();
 		private TcpListener socket;
 		private Thread thread;
-		private Timer pingTimer;
 		private SLNClient slnClient;
 		private ConsoleInput consoleInput;
 		private Dictionary<ushort, IClient> clients;
 		private Dictionary<ushort, IMap> maps;
 		private List<Character> characters;
+
+        private Timer pingTimer;
+        private Timer npcRespawnTimer;
 
 		public EIF ItemData { get; private set; }
 		public ENF NpcData { get; private set; }
@@ -33,6 +35,9 @@ namespace EOHax.Programs.EOSERV
 		public ScriptHost ScriptHost { get; private set; }
 
 		public GlobalChat Global { get; private set; }
+
+        /*public delegate void WalkEventHandler(MapWalkEventArgs we);
+        public event WalkEventHandler WalkEvent;*/
 
 		public IDictionary<ushort, IClient> Clients
 		{
@@ -77,7 +82,9 @@ namespace EOHax.Programs.EOSERV
 			socket = new TcpListener(addr, port);
 			Program.Logger.LogInfo(String.Format("Listening on {0}:{1}", addr, port));
 			thread = new Thread(AcceptClients);
+
 			pingTimer = new Timer(new TimerCallback(this.PingClients), new AutoResetEvent(false), 60000, 60000);
+            npcRespawnTimer = new Timer(new TimerCallback(this.RespawnNPCs), new AutoResetEvent(false), 2000, 1000);
 
 			Database = new Database("eoserv.db4o");
 			Program.Logger.LogSuccess("Database loaded.");
@@ -106,6 +113,7 @@ namespace EOHax.Programs.EOSERV
 			{
 				entry.Value.GetPubFile("./tmp/");
 				maps.Add(entry.Key, new Map(entry.Value));
+                maps[entry.Key].SpawnNpcs(this);
 			}
 
 			if (Program.Taskbar != null)
@@ -205,6 +213,11 @@ namespace EOHax.Programs.EOSERV
 				}
 			}
 		}
+
+        private void RespawnNPCs(Object stateInfo)
+        {
+
+        }
 
 		public void Shutdown(int time)
 		{

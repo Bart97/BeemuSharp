@@ -45,6 +45,7 @@ namespace EOHax.Scripting
 			this.Source = source;
 			this.referencedAssemblies = new List<string>();
             referencedAssemblies.Add("System.dll");
+			referencedAssemblies.Add("EOSERV.exe");
 		}
 	}
 }

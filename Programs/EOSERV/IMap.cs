@@ -16,7 +16,9 @@ namespace EOHax.Programs.EOSERV
 		ICollection<IMapObject> Objects { get; }
 		MapData                 Data    { get; }
 
-		bool InBounds(byte x, byte y);
+        void SpawnNpcs(IServer server);
+        
+        bool InBounds(byte x, byte y);
 
 		T              ObjectOnTile<T>  (byte x, byte y)                    where T : IMapObject;
 		IEnumerable<T> ObjectsOnTile<T> (byte x, byte y)                    where T : IMapObject;

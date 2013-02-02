@@ -68,7 +68,7 @@ namespace EOHax.Programs.EOSERV
 		public Item bracer2;
 #endregion
 
-		[NonSerialized] private short maxSp;
+        [NonSerialized] private short maxSp;
 
 #region Null Accessors
 		public string Name

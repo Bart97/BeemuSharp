@@ -93,16 +93,19 @@
     <Compile Include="Account.cs" />
     <Compile Include="CommandHandler.cs" />
     <Compile Include="Commands\Admin.cs" />
+    <Compile Include="Commands\Sn.cs" />
     <Compile Include="Commands\St.cs" />
     <Compile Include="Commands\Test.cs" />
     <Compile Include="Commands\W.cs" />
     <Compile Include="ConsoleInput.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="DatabaseObject.cs" />
+    <Compile Include="Events\PlayerEvents\WalkEventArgs.cs" />
     <Compile Include="GlobalChat.cs" />
     <Compile Include="Handlers\Account.cs" />
     <Compile Include="Handlers\Chair.cs" />
     <Compile Include="Handlers\Emote.cs" />
+    <Compile Include="EventHandler.cs" />
     <Compile Include="Handlers\Face.cs" />
     <Compile Include="Handlers\Item.cs" />
     <Compile Include="Handlers\PaperDoll.cs" />
@@ -117,6 +120,7 @@
     <Compile Include="MapItem.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="IServer.cs" />
+    <Compile Include="NPC.cs" />
     <Compile Include="NullClient.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="Handlers\Character.cs" />

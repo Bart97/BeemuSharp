@@ -22,8 +22,19 @@ namespace EOHax.Programs.EOSERV
 		{
 			this.Data = data;
 		}
-		
-		/// <summary>
+
+        public void SpawnNpcs(IServer server)
+        {
+            foreach (MapData.Tile tile in Data.Tiles)
+            {
+                if (tile.npc != null)
+                {
+                    Enter(new NPC(server, (short)tile.npc.Value.id, Data.Id, tile.npc.Value.x, tile.npc.Value.y), WarpAnimation.None);
+                }
+            }
+        }
+        
+        /// <summary>
 		/// Checks if the provided coordinates are in bounds of the map
 		/// </summary>
 		/// <param name="x">X coordinate</param>
